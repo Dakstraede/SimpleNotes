@@ -1,17 +1,29 @@
 package com.gp19.esgi.simplenotes;
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.Loader;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.ListView;
+
+import com.gp19.esgi.simplenotes.database.DBHelper;
+import com.gp19.esgi.simplenotes.database.NoteDataSource;
+import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
 
-public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener{
-
+public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, LoaderManager.LoaderCallbacks<List<?>>{
+    private static final int LOADER_ID = 1;
     private final static int ITEM_PER_REQUEST = 10;
+    private SQLiteDatabase sqLiteDatabase;
+    private NoteDataSource noteDataSource;
+    private DBHelper helper;
     EndlessNoteListView listView;
     int mult = 1;
 
@@ -19,15 +31,47 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        helper = new DBHelper(this);
+        sqLiteDatabase = helper.getWritableDatabase();
+        noteDataSource = new NoteDataSource(sqLiteDatabase);
+        noteDataSource.insert(new Note("pa", "ss"));
+        noteDataSource.insert(new Note("Ma note 2", "Liste d'achats"));
 
         listView = (EndlessNoteListView) findViewById(R.id.el);
-        EndlessAdapter adapter = new EndlessAdapter(this, createItems(mult), R.layout.row_layout);
+        EndlessAdapter adapter = new EndlessAdapter(this, noteDataSource.read(), R.layout.row_layout);
         listView.setLoadingView(R.layout.loading_layout);
         listView.setAdapter(adapter);
         listView.setListener(this);
 
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+
     }
 
+    @Override
+    public Loader<List<?>> onCreateLoader(int id, Bundle args) {
+        SQLiteNoteDataLoader loader = new SQLiteNoteDataLoader(this, noteDataSource, null, null, null, null, null);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<?>> loader, List<?> data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<?>> loader) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        helper.close();
+        sqLiteDatabase.close();
+        noteDataSource = null;
+        helper = null;
+        sqLiteDatabase = null;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,20 +111,20 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
 //            listView.addNewData(result);
 //        }
 //    }
-    private List<String> createItems(int mult) {
-        List<String> result = new ArrayList<String>();
-        for (int i=0; i < ITEM_PER_REQUEST; i++) {
-            result.add("Item " + (i * mult));
-        }
-        return result;
-    }
+//    private List<Note> createItems(List<Note> aa) {
+//        List<Note> result = new ArrayList<Note>();
+//        Note ne = new Note("ss", "ds");
+//        Note nn = new Note("ddd", "sdsd");
+//        for (int i=0; i < ITEM_PER_REQUEST; i++) {
+//            result.add();
+//        }
+//        return result;
+//    }
 
-//    @Override
+    @Override
     public void loadData() {
         mult += 10;
-//        // We load more data here
-//        FakeNetLoader fl = new FakeNetLoader();
-//        fl.execute(new String[]{});
+
     }
 
 }

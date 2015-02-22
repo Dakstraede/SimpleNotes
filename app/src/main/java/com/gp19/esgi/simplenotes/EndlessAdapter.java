@@ -11,11 +11,11 @@ import java.util.List;
 
 public class EndlessAdapter extends ArrayAdapter {
 
-    private List<String> itemList;
+    private List<Note> itemList;
     private Context context;
     private int layoutId;
 
-    public EndlessAdapter(Context context, List<String> itemList, int layoutId)
+    public EndlessAdapter(Context context, List<Note> itemList, int layoutId)
     {
         super(context, layoutId, itemList);
         this.itemList = itemList;
@@ -48,8 +48,10 @@ public class EndlessAdapter extends ArrayAdapter {
             result = inflater.inflate(layoutId, parent, false);
         }
 
-        TextView tv = (TextView) result.findViewById(R.id.txt1);
-        tv.setText(itemList.get(position));
+        TextView tv = (TextView) result.findViewById(R.id.title);
+        tv.setText(itemList.get(position).getNoteTitle());
+        TextView tv2 = (TextView) result.findViewById(R.id.txt1);
+        tv2.setText(itemList.get(position).getNoteContent());
 
         return result;
     }

@@ -3,4 +3,5 @@
     <string name="app_name">Simple Notes</string>
     <string name="action_settings">Paramètres</string>
     <string name="hello_world">Hello world!</string>
+    <string name="main_search_placeholder">Rechercher</string>
 </resources>
