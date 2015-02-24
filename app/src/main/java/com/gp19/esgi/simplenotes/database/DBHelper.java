@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
 /**
  * Created by Mathieu on 22/02/2015.
  */
@@ -23,6 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(NoteDataSource.CREATE_COMMAND);
+        db.execSQL(NoteDataSource.CREATE_NOTE_TABLE);
+        db.execSQL(NoteDataSource.CREATE_TABLE_GROUP);
+        db.execSQL(NoteDataSource.CREATE_LINK_TABLE);
     }
 }
