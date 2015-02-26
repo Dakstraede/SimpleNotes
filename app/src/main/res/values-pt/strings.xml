@@ -4,4 +4,5 @@
     <string name="action_settings">Definições</string>
     <string name="hello_world">Hello world!</string>
     <string name="main_search_placeholder">Procurar</string>
+    <string name="search_hint">Procurar notas a partir da lista</string>
 </resources>

@@ -5,30 +5,37 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
 
-public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, LoaderManager.LoaderCallbacks<List<?>>{
+public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, LoaderManager.LoaderCallbacks<List<?>>{
     private static final int LOADER_ID = 1;
     private final static int ITEM_PER_REQUEST = 4;
     private SQLiteDatabase sqLiteDatabase;
     private NoteDataSource noteDataSource;
     private DBHelper helper;
+    private SearchView searchView;
     EndlessNoteListView listView;
     private EndlessAdapter adapter;
     private int last;
-    private List l;
+    private List<Note> l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        l = new ArrayList<Note>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         helper = new DBHelper(this);
@@ -53,6 +60,9 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         listView.setLoadingView(R.layout.loading_layout);
         listView.setAdapter(adapter);
         listView.setListener(this);
+        searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -77,6 +87,59 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         adapter.clear();
         last = 0;
 
+    }
+
+    @Override
+    public boolean onClose() {
+        if (listView.setListener() == null)
+        {
+            listView.setListener(this);
+        }
+        return false;
+    }
+
+    private void displayResult(String query){
+        List<Note> newList = new ArrayList<Note>();
+        if (!TextUtils.isEmpty(query)){
+
+            for (Note note : l)
+            {
+                if (note.getNoteTitle().toLowerCase().contains(query.toLowerCase()))
+                {
+                    newList.add(note);
+                }
+            }
+            last = 0;
+            adapter.clear();
+            listView.addNewData(newList);
+        }
+        else{
+            last = 0;
+            adapter.clear();
+            loadData();
+        }
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (listView.setListener() != null)
+        {
+            listView.setListener(null);
+        }
+        displayResult(query);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (listView.setListener() != null)
+        {
+            listView.setListener(null);
+        }
+        displayResult(newText);
+        return true;
     }
 
     @Override
@@ -125,7 +188,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
             int i;
             for(i = last; i < last + ITEM_PER_REQUEST -1 && i < l.size(); i++)
             {
-                li.add((Note)l.get(i));
+                li.add(l.get(i));
             }
             last = i;
             listView.addNewData(li);

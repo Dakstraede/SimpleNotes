@@ -41,15 +41,18 @@ public class EndlessNoteListView extends ListView implements AbsListView.OnScrol
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-        if (getAdapter() == null)
+        if (listener != null)
         {
-            return;
-        }
-        int l = visibleItemCount + firstVisibleItem;
-        if (l >= totalItemCount && !isLoading){
-            this.addFooterView(footer);
-            isLoading = true;
-            listener.loadData();
+            if (getAdapter() == null)
+            {
+                return;
+            }
+            int l = visibleItemCount + firstVisibleItem;
+            if (l >= totalItemCount && !isLoading){
+                this.addFooterView(footer);
+                isLoading = true;
+                listener.loadData();
+            }
         }
     }
 

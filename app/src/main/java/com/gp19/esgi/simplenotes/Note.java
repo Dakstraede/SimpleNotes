@@ -33,7 +33,7 @@ public class Note {
     }
 
     public Note(String noteTitle, String noteContent, int id, boolean isArchived, Date creationDate, Date lastModicationDate, int importanceLevel)
-    {
+    { //For an existing one taken from DB
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
         this.id = id;
