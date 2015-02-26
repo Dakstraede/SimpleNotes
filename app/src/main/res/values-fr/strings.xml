@@ -4,4 +4,9 @@
     <string name="action_settings">Paramètres</string>
     <string name="hello_world">Hello world!</string>
     <string name="main_search_placeholder">Rechercher</string>
+    <string name="action_addNote">Ajouter Note</string>
+    <string name="note_title">Titre</string>
+    <string name="note_title_hint">Ajouter un titre ici</string>
+    <string name="note_content_hint">Ajouter du texte</string>
+    <string name="button_save">Sauvegarder</string>
 </resources>

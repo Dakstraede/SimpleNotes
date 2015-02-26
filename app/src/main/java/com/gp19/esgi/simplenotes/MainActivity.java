@@ -1,6 +1,7 @@
 package com.gp19.esgi.simplenotes;
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -103,8 +104,13 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_addNote:
+                Intent intent = new Intent(this, AddNoteActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_settings:
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
