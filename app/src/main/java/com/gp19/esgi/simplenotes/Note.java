@@ -72,10 +72,12 @@ public class Note {
 
     public void setNoteTitle(String noteTitle) {
         this.noteTitle = noteTitle;
+        this.setLastModicationDate();
     }
 
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
+        this.setLastModicationDate();
     }
 
     public void setId(long id) {
@@ -84,6 +86,7 @@ public class Note {
 
     public void setArchived(boolean isArchived) {
         this.isArchived = isArchived;
+        this.setLastModicationDate();
     }
 
     public void setCreationDate(Date creationDate) {
@@ -94,11 +97,16 @@ public class Note {
         this.lastModicationDate = lastModicationDate;
     }
 
+    public void setLastModicationDate() {
+        this.lastModicationDate = new Date(System.currentTimeMillis());
+    }
+
     public int getImportanceLevel() {
         return importanceLevel;
     }
 
     public void setImportanceLevel(int importanceLevel) {
         this.importanceLevel = importanceLevel;
+        this.setLastModicationDate();
     }
 }

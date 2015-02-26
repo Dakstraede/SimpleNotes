@@ -8,7 +8,6 @@ import android.util.Log;
 import com.gp19.esgi.simplenotes.Note;
 import com.gp19.esgi.simplenotes.NoteGroup;
 
-import java.security.acl.Group;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -122,6 +121,24 @@ public class NoteDataSource {
         return result != 0;
     }
 
+    public boolean update(Note entity){
+        if (entity == null){
+            return false;
+        }
+        int result = mDatabase.update(TABLE_NOTE, generateContentValuesFromObject(entity), COLUMN_ID + " = " + entity.getId(),null);
+        return result != 0;
+    }
+
+    public boolean update(NoteGroup entity){
+        if(entity == null){
+            return false;
+        }
+        int result = mDatabase.update(TABLE_GROUP, generateContentValuesFromObject(entity), COLUMN_ID + " = " + entity.getId(), null);
+        return result != 0;
+    }
+
+
+
 //    public boolean insert(Group en1, Note en2){
 //        if (en1 == null || en2 == null){
 //            return false;
@@ -177,9 +194,7 @@ public class NoteDataSource {
             return null;
         }
 
-        NoteGroup group = new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_NAME)));
-
-        return group;
+        return new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_NAME)));
     }
 
 
