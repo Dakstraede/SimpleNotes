@@ -12,7 +12,7 @@ public class Note {
 
     private String noteTitle;
     private String noteContent;
-    private int id;
+    private long id;
     private boolean isArchived;
     private Date creationDate;
     private Date lastModicationDate;
@@ -54,7 +54,7 @@ public class Note {
         return noteContent;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -78,7 +78,7 @@ public class Note {
         this.noteContent = noteContent;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

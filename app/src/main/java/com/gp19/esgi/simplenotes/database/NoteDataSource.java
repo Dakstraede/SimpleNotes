@@ -3,8 +3,10 @@ package com.gp19.esgi.simplenotes.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.gp19.esgi.simplenotes.Note;
+import com.gp19.esgi.simplenotes.NoteGroup;
 
 import java.security.acl.Group;
 import java.text.DateFormat;
@@ -74,16 +76,50 @@ public class NoteDataSource {
         if (entity == null){
             return false;
         }
-        long result = mDatabase.insert(TABLE_NOTE, null, generateContentValuesFromObject(entity));
+        long  result = mDatabase.insert(TABLE_NOTE, null, generateContentValuesFromObject(entity));
+        if (result != -1){
+            entity.setId(result);
+        }
         return result != -1;
     }
 
-    public boolean insert(Group entity){
+    public boolean insert(NoteGroup group, Note note){
+        if (group == null || note == null){
+            return false;
+        }
+        else {
+            long result = mDatabase.insert(TABLE_LINK, null, generateContentValuesFromObject(group, note));
+            return result != 1;
+        }
+    }
+
+    public boolean insert(NoteGroup entity){
         if (entity == null){
             return false;
         }
-        long result = mDatabase.insert(TABLE_GROUP, null, null);
+        long result = mDatabase.insert(TABLE_GROUP, null, generateContentValuesFromObject(entity));
+        if (result != -1){
+            entity.setId(result);
+        }
         return result != -1;
+    }
+
+    public boolean delete(Note entity){
+        if (entity == null){
+            return false;
+        }
+        int result = mDatabase.delete(TABLE_NOTE, COLUMN_ID + " = " + entity.getId(), null);
+        mDatabase.delete(TABLE_LINK, COLUMN_LINK_NOTE_ID + " = " + entity.getId(), null);
+        return result != 0;
+    }
+
+    public boolean delete(NoteGroup entity){
+        if (entity == null){
+            return false;
+        }
+        int result = mDatabase.delete(TABLE_GROUP, COLUMN_ID + " = " + entity.getId(), null);
+        mDatabase.delete(TABLE_LINK, COLUMN_LINK_GROUP_ID + " = " + entity.getId(), null);
+        return result != 0;
     }
 
 //    public boolean insert(Group en1, Note en2){
@@ -124,15 +160,28 @@ public class NoteDataSource {
         return notes;
     }
 
-
-
-
-
-
-
     public String[] getAllColumns(){
         return new String[] {COLUMN_ID, COLUMN_NOTE_TITLE, COLUMN_NOTE_CONTENT, COLUMN_NOTE_ARCHIVE, COLUMN_NOTE_CREATION, COLUMN_NOTE_MODIFICATION, COLUMN_NOTE_IMPORTANCE};
     }
+
+    public String[] getAllColumnsGroup() {
+        return new String[] {COLUMN_ID, COLUMN_GROUP_NAME};
+    }
+
+    public String[] getAllColumnsLink(){
+        return new String[] {COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID};
+    }
+
+    public NoteGroup generateGroupFromCursor(Cursor cursor){
+        if (cursor == null){
+            return null;
+        }
+
+        NoteGroup group = new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_NAME)));
+
+        return group;
+    }
+
 
 
     public Note generateObjectFromCursor(Cursor cursor){
@@ -172,6 +221,27 @@ public class NoteDataSource {
         note.setImportanceLevel(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTE_IMPORTANCE)));
 
         return note;
+    }
+
+
+    public ContentValues generateContentValuesFromObject(NoteGroup noteGroup, Note note){
+        if (noteGroup == null || note == null){
+            return null;
+        }
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_LINK_GROUP_ID, noteGroup.getId());
+        values.put(COLUMN_LINK_NOTE_ID, note.getId());
+        return values;
+    }
+
+
+    public ContentValues generateContentValuesFromObject(NoteGroup noteGroup){
+        if (noteGroup == null){
+            return null;
+        }
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_GROUP_NAME, noteGroup.getGroupName());
+        return values;
     }
 
     public ContentValues generateContentValuesFromObject(Note note){

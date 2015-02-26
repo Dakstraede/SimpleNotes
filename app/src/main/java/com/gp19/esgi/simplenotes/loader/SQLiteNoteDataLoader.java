@@ -30,6 +30,10 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<?>> {
 
     }
 
+//    @Override
+//    protected List<?> buildListGroup() {
+//        List list = mDataSource.read()
+//    }
 
     public List buildList(){
         List list = mDataSource.read(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);

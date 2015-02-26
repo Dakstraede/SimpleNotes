@@ -12,6 +12,7 @@ public abstract class AbstractDataLoader<E extends List<?>> extends AsyncTaskLoa
 
     protected E mlastDataList = null;
     protected abstract E buildList();
+//    protected abstract E buildListGroup();
 
     public AbstractDataLoader(Context context){
         super(context);
