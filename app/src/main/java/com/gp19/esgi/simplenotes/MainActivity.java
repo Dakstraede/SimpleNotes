@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -167,13 +168,8 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch(id){
-            case R.id.action_addNote:
-                Intent intent = new Intent(this, AddNoteActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.action_settings:
-                return true;
+        if (id == R.id.action_settings) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -196,4 +192,8 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         else listView.removeFooter();
     }
 
+    public void addNote(View view) {
+        Intent intent = new Intent(this, AddNoteActivity.class);
+        startActivity(intent);
+    }
 }
