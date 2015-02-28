@@ -72,7 +72,10 @@ public class EndlessAdapter extends ArrayAdapter {
         TextView tv = (TextView) result.findViewById(R.id.title);
         tv.setText(itemList.get(position).getNoteTitle());
         TextView tv2 = (TextView) result.findViewById(R.id.txt1);
-        tv2.setText(itemList.get(position).getNoteContent());
+        if (itemList.get(position).getNoteContent().length() > 15){
+            tv2.setText(itemList.get(position).getNoteContent().substring(0,14) + "[...]");
+        }
+        else tv2.setText(itemList.get(position).getNoteContent());
 //        TextView tv3 = (TextView) result.findViewById(R.id.txtDate);
 //        tv3.setText(itemList.get(position).getCreationDate().toString());
 

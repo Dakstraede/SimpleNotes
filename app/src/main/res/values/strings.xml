@@ -12,6 +12,8 @@
     <string name="note_content_hint">Add Text</string>
     <string name="button_save">Save</string>
     <string name="sort_prompt">Sort by</string>
+    <string name="importance_text">Importance</string>
+    <string name="importance_prompt">Select importance</string>
 
     <string-array name="sort_array">
         <item>Title</item>

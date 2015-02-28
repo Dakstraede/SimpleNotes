@@ -19,6 +19,7 @@
             android:textStyle="italic"
             android:typeface="normal"
             android:onClick="addNote"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -44,7 +45,17 @@
 
     </LinearLayout>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New CheckBox"
+        android:id="@+id/checkBox"
+        android:checked="true"
+        android:clickable="true"
+        android:elegantTextHeight="false" />
+
     <com.gp19.esgi.simplenotes.EndlessNoteListView android:id="@+id/el"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

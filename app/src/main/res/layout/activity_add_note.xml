@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/note_title_hint"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:maxLength="20"/>
 
     </LinearLayout>
 
@@ -34,9 +35,29 @@
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="center"
         android:hint="@string/note_content_hint"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/importance_text"
+            android:id="@+id/importanceText" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_gravity="center_horizontal"
+            android:prompt="@string/importance_prompt"/>
+    </LinearLayout>
 
     <Button
         android:layout_width="match_parent"

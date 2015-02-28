@@ -26,7 +26,6 @@ public class AddNoteActivity extends ActionBarActivity {
         ArrayList l = new ArrayList();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -61,8 +60,11 @@ public class AddNoteActivity extends ActionBarActivity {
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         NoteDataSource noteDataSource = new NoteDataSource(sqLiteDatabase);
         noteDataSource.insert(new Note(titleText, contentText));
+        helper.close();
+        sqLiteDatabase.close();
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }
