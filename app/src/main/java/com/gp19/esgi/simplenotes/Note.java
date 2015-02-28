@@ -20,16 +20,14 @@ public class Note {
 
     public Note(){}
 
-    public Note(String noteTitle, String noteContent)
+    public Note(String noteTitle, String noteContent, int importanceLevel)
     { // For a new one
         this.noteTitle = noteTitle;
         this.noteContent = noteContent;
         this.creationDate = new Date(System.currentTimeMillis());
-        this.importanceLevel = 0;
+        this.importanceLevel = importanceLevel;
         this.lastModicationDate = null;
         this.isArchived = false;
-
-
     }
 
     public Note(String noteTitle, String noteContent, int id, boolean isArchived, Date creationDate, Date lastModicationDate, int importanceLevel)

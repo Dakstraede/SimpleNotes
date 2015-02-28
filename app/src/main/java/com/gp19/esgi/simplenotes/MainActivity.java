@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         listView.setLoadingView(R.layout.loading_layout);
         listView.setAdapter(adapter);
         listView.setListener(this);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
