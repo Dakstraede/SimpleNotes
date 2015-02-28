@@ -193,7 +193,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position){
             case 0:
-                adapter.setComparator(new Comparator<Note>() {
+                adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
                         return lhs.getNoteTitle().toLowerCase().compareTo(rhs.getNoteTitle().toLowerCase());
@@ -201,7 +201,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 });
                 break;
             case 1:
-                adapter.setComparator(new Comparator<Note>() {
+                adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
                         return lhs.getCreationDate().compareTo(rhs.getCreationDate());
@@ -209,7 +209,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 });
                 break;
             case 2:
-                adapter.setComparator(new Comparator<Note>() {
+                adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
                         return lhs.getLastModicationDate().compareTo(rhs.getLastModicationDate());
@@ -217,7 +217,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 });
                 break;
             case 3:
-                adapter.setComparator(new Comparator<Note>() {
+                adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
                         if (lhs.getImportanceLevel() < rhs.getImportanceLevel()){

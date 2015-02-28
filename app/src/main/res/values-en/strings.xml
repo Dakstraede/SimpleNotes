@@ -18,4 +18,5 @@
         <item>Importance</item>
     </string-array>
     <string name="sort_prompt">Sort by</string>
+    <string name="archived_check">Show archived notes</string>
 </resources>

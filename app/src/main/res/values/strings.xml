@@ -14,6 +14,7 @@
     <string name="sort_prompt">Sort by</string>
     <string name="importance_text">Importance</string>
     <string name="importance_prompt">Select importance</string>
+    <string name="archived_check">Show archived notes</string>
 
     <string-array name="sort_array">
         <item>Title</item>

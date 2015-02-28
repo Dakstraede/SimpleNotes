@@ -16,7 +16,6 @@ public class EndlessAdapter extends ArrayAdapter {
     private List<Note> itemList;
     private Context context;
     private int layoutId;
-    private Comparator<Note> comparator;
 
 
     public EndlessAdapter(Context context, List<Note> itemList, int layoutId)
@@ -27,22 +26,6 @@ public class EndlessAdapter extends ArrayAdapter {
         this.layoutId  = layoutId;
     }
 
-    public void setComparator(Comparator<Note> comparator){
-        this.comparator = comparator;
-        this.sort();
-        this.notifyDataSetChanged();
-    }
-
-    public Comparator<Note> getComparator(){
-        return this.comparator;
-    }
-
-    public void sort(){
-        if (this.comparator != null){
-            Collections.sort(this.itemList, this.comparator);
-        }
-
-    }
 
     @Override
     public int getCount() {

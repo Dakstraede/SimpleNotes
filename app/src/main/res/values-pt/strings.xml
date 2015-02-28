@@ -11,4 +11,5 @@
     <string name="note_title">Título</string>
     <string name="note_title_hint">Adicionar um título</string>
     <string name="sort_prompt">Odernar por</string>
+    <string name="archived_check"></string>
 </resources>
