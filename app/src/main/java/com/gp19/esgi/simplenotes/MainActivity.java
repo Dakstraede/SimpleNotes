@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     private int last;
     private List<Note> l;
     private Spinner spinner;
+    private boolean checkedArchived;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,16 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         spinner = (Spinner) findViewById(R.id.sort_spinner);
         spinner.setOnItemSelectedListener(this);
         getLoaderManager().initLoader(LOADER_ID, null, this);
+        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checkedArchived = isChecked;
+                last = 0;
+                adapter.clear();
+                loadData();
+            }
+        });
     }
 
     @Override
@@ -92,7 +105,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
 
             for (Note note : l)
             {
-                if (note.getNoteTitle().toLowerCase().contains(query.toLowerCase()))
+                if (note.getNoteTitle().toLowerCase().contains(query.toLowerCase()) && ((note.isArchived() && checkedArchived) || !note.isArchived()))
                 {
                     newList.add(note);
                 }
@@ -169,7 +182,10 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
             int i;
             for(i = last; i < last + ITEM_PER_REQUEST -1 && i < l.size(); i++)
             {
-                li.add(l.get(i));
+                if(l.get(i).isArchived() && checkedArchived || ! l.get(i).isArchived()){
+                    li.add(l.get(i));
+                }
+
             }
             last = i;
             listView.addNewData(li);
@@ -220,10 +236,9 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
-                        if (lhs.getImportanceLevel() < rhs.getImportanceLevel()){
+                        if (lhs.getImportanceLevel() < rhs.getImportanceLevel()) {
                             return 1;
-                        }
-                        else return -1;
+                        } else return -1;
                     }
                 });
                 break;
