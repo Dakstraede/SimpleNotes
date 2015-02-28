@@ -5,4 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="main_search_placeholder">Procurar</string>
     <string name="search_hint">Procurar notas a partir da lista</string>
+    <string name="action_addNote">Adicionar uma nota</string>
+    <string name="button_save">Salvar</string>
+    <string name="note_content_hint">Adicionar texto</string>
+    <string name="note_title">Título</string>
+    <string name="note_title_hint">Adicionar um título</string>
+    <string name="sort_prompt">Odernar por</string>
 </resources>

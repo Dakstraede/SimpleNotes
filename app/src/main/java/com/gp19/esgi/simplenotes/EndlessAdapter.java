@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EndlessAdapter extends ArrayAdapter {
@@ -14,6 +16,8 @@ public class EndlessAdapter extends ArrayAdapter {
     private List<Note> itemList;
     private Context context;
     private int layoutId;
+    private Comparator<Note> comparator;
+
 
     public EndlessAdapter(Context context, List<Note> itemList, int layoutId)
     {
@@ -21,6 +25,23 @@ public class EndlessAdapter extends ArrayAdapter {
         this.itemList = itemList;
         this.context = context;
         this.layoutId  = layoutId;
+    }
+
+    public void setComparator(Comparator<Note> comparator){
+        this.comparator = comparator;
+        this.sort();
+        this.notifyDataSetChanged();
+    }
+
+    public Comparator<Note> getComparator(){
+        return this.comparator;
+    }
+
+    public void sort(){
+        if (this.comparator != null){
+            Collections.sort(this.itemList, this.comparator);
+        }
+
     }
 
     @Override
@@ -52,6 +73,8 @@ public class EndlessAdapter extends ArrayAdapter {
         tv.setText(itemList.get(position).getNoteTitle());
         TextView tv2 = (TextView) result.findViewById(R.id.txt1);
         tv2.setText(itemList.get(position).getNoteContent());
+//        TextView tv3 = (TextView) result.findViewById(R.id.txtDate);
+//        tv3.setText(itemList.get(position).getCreationDate().toString());
 
         return result;
     }

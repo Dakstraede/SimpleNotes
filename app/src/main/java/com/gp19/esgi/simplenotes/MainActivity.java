@@ -10,19 +10,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SearchView;
-import android.widget.TextView;
-
+import android.widget.Spinner;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
 
-public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, LoaderManager.LoaderCallbacks<List<?>>{
+public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, LoaderManager.LoaderCallbacks<List<?>>, AdapterView.OnItemSelectedListener{
     private static final int LOADER_ID = 1;
     private final static int ITEM_PER_REQUEST = 4;
     private SQLiteDatabase sqLiteDatabase;
@@ -33,6 +32,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     private EndlessAdapter adapter;
     private int last;
     private List<Note> l;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +42,6 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);
-        noteDataSource.insert(new Note("pa", "ss"));
-        noteDataSource.insert(new Note("Ma note 3", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 4", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 5", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 6", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 7", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 8", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 9", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 10", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 11", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 12", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 13", "Liste d'achats"));
-        noteDataSource.insert(new Note("Ma note 14", "Liste d'achats"));
-
         listView = (EndlessNoteListView) findViewById(R.id.el);
         adapter = new EndlessAdapter(this, new ArrayList<Note>(), R.layout.row_layout);
         listView.setLoadingView(R.layout.loading_layout);
@@ -64,9 +50,9 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
-
+        spinner = (Spinner) findViewById(R.id.sort_spinner);
+        spinner.setOnItemSelectedListener(this);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-
     }
 
     @Override
@@ -171,10 +157,8 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void loadData() {
@@ -195,5 +179,51 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     public void addNote(View view) {
         Intent intent = new Intent(this, AddNoteActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 0:
+                adapter.setComparator(new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getNoteTitle().toLowerCase().compareTo(rhs.getNoteTitle().toLowerCase());
+                    }
+                });
+                break;
+            case 1:
+                adapter.setComparator(new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getCreationDate().compareTo(rhs.getCreationDate());
+                    }
+                });
+                break;
+            case 2:
+                adapter.setComparator(new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        return lhs.getLastModicationDate().compareTo(rhs.getLastModicationDate());
+                    }
+                });
+                break;
+            case 3:
+                adapter.setComparator(new Comparator<Note>() {
+                    @Override
+                    public int compare(Note lhs, Note rhs) {
+                        if (lhs.getImportanceLevel() < rhs.getImportanceLevel()){
+                            return 1;
+                        }
+                        else return -1;
+                    }
+                });
+                break;
+            }
+        }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

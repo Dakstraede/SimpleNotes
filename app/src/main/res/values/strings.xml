@@ -11,4 +11,12 @@
     <string name="note_title_hint">Add a title here</string>
     <string name="note_content_hint">Add Text</string>
     <string name="button_save">Save</string>
+    <string name="sort_prompt">Sort by</string>
+
+    <string-array name="sort_array">
+        <item>Title</item>
+        <item>Creation date</item>
+        <item>Last modidification date</item>
+        <item>Importance</item>
+    </string-array>
 </resources>

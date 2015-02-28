@@ -10,4 +10,12 @@
     <string name="note_title_hint">Ajouter un titre ici</string>
     <string name="note_content_hint">Ajouter du texte</string>
     <string name="button_save">Sauvegarder</string>
+
+    <string-array name="sort_array">
+        <item>Titre</item>
+        <item>Date de création</item>
+        <item>Date de modification</item>
+        <item>Importance</item>
+    </string-array>
+    <string name="sort_prompt">Trier par</string>
 </resources>
