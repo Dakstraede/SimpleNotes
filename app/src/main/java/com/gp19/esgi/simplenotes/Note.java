@@ -59,6 +59,7 @@ public class Note implements Parcelable {
         if (lastModicationDate != null){
             this.lastModicationDate = lastModicationDate;
         }
+        else this.lastModicationDate = null;
         this.importanceLevel = importanceLevel;
 
     }
@@ -89,12 +90,10 @@ public class Note implements Parcelable {
 
     public void setNoteTitle(String noteTitle) {
         this.noteTitle = noteTitle;
-        this.setLastModicationDate();
     }
 
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
-        this.setLastModicationDate();
     }
 
     public void setId(long id) {
@@ -103,7 +102,6 @@ public class Note implements Parcelable {
 
     public void setArchived(boolean isArchived) {
         this.isArchived = isArchived;
-        this.setLastModicationDate();
     }
 
     public void setCreationDate(Date creationDate) {
@@ -124,7 +122,6 @@ public class Note implements Parcelable {
 
     public void setImportanceLevel(int importanceLevel) {
         this.importanceLevel = importanceLevel;
-        this.setLastModicationDate();
     }
 
 

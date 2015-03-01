@@ -15,6 +15,8 @@
     <string name="importance_text">Importance</string>
     <string name="importance_prompt">Select importance</string>
     <string name="archived_check">Show archived notes</string>
+    <string name="create_label">Created on</string>
+    <string name="modif_label">Modified on</string>
 
     <string-array name="sort_array">
         <item>Title</item>

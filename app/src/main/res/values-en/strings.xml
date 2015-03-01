@@ -19,4 +19,8 @@
     </string-array>
     <string name="sort_prompt">Sort by</string>
     <string name="archived_check">Show archived notes</string>
+    <string name="create_label">Created on</string>
+    <string name="importance_prompt">Select importance</string>
+    <string name="importance_text">Importance</string>
+    <string name="modif_label">Modified on</string>
 </resources>
