@@ -22,4 +22,5 @@
         <item>Last modidification date</item>
         <item>Importance</item>
     </string-array>
+    <string name="title_activity_edit_note">EditNoteActivity</string>
 </resources>

@@ -1,11 +1,14 @@
 package com.gp19.esgi.simplenotes;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Note {
+public class Note implements Parcelable {
 
     public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
@@ -19,6 +22,22 @@ public class Note {
     private int importanceLevel;
 
     public Note(){}
+
+    public Note(Parcel in){
+        this.noteTitle = in.readString();
+        this.noteContent = in.readString();
+        this.id = in.readLong();
+        this.isArchived = in.readByte() != 0;
+        this.creationDate = new Date(in.readLong());
+        if (in.readInt() == 1) {
+            this.lastModicationDate = new Date(in.readLong()); // default classloader
+        }
+        else {
+            this.lastModicationDate = null;
+        }
+
+        this.importanceLevel = in.readInt();
+    }
 
     public Note(String noteTitle, String noteContent, int importanceLevel)
     { // For a new one
@@ -107,4 +126,38 @@ public class Note {
         this.importanceLevel = importanceLevel;
         this.setLastModicationDate();
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.noteTitle);
+        dest.writeString(this.noteContent);
+        dest.writeLong(this.id);
+        dest.writeByte((byte) (this.isArchived ? 1 : 0));
+        dest.writeLong(this.creationDate.getTime());
+        if (this.lastModicationDate != null) {
+            dest.writeInt(1);
+            dest.writeLong(this.lastModicationDate.getTime());
+        } else {
+            dest.writeInt(0);
+        }
+        dest.writeInt(this.importanceLevel);
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>(){
+        @Override
+        public Note createFromParcel(Parcel source) {
+            return new Note(source);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[0];
+        }
+    };
 }

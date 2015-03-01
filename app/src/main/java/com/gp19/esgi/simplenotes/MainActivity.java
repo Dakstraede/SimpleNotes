@@ -27,6 +27,7 @@ import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, LoaderManager.LoaderCallbacks<List<?>>, AdapterView.OnItemSelectedListener{
     private static final int LOADER_ID = 1;
     private final static int ITEM_PER_REQUEST = 3;
+    public final static String MY_NOTE = "MY_NOTE";
     private SQLiteDatabase sqLiteDatabase;
     private NoteDataSource noteDataSource;
     private DBHelper helper;
@@ -66,6 +67,15 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 last = 0;
                 adapter.clear();
                 loadData();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+                intent.putExtra(MY_NOTE, (Note)adapter.getItem(position));
+                startActivity(intent);
             }
         });
     }
