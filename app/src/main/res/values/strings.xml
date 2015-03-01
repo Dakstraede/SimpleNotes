@@ -17,6 +17,9 @@
     <string name="archived_check">Show archived notes</string>
     <string name="create_label">Created on</string>
     <string name="modif_label">Modified on</string>
+    <string name="save_button">Save</string>
+    <string name="remove_button">Remove</string>
+    <string name="archived_note_check_text">Archived</string>
 
     <string-array name="sort_array">
         <item>Title</item>

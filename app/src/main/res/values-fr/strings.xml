@@ -23,4 +23,6 @@
     <string name="importance_prompt">S"lectionner l'importance</string>
     <string name="importance_text">Importance</string>
     <string name="modif_label">Modifiée le </string>
+    <string name="remove_button">Supprimer</string>
+    <string name="save_button">Enregistrer</string>
 </resources>

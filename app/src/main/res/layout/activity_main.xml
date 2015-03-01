@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:text="@string/archived_check"
         android:id="@+id/checkBox"
-        android:checked="true"
+        android:checked="false"
         android:clickable="true"/>
 
     <com.gp19.esgi.simplenotes.EndlessNoteListView android:id="@+id/el"

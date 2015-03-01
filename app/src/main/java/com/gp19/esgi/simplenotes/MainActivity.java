@@ -6,9 +6,6 @@ import android.content.Loader;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -38,6 +35,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     private List<Note> l;
     private Spinner spinner;
     private boolean checkedArchived;
+    private int nbarch = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +88,9 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     public void onLoadFinished(Loader<List<?>> loader, List<?> data) {
         adapter.clear();
         l = new ArrayList(data);
+        for (Note note : l){
+            if (note.isArchived()) nbarch++;
+        }
         last = 0;
         loadData();
     }
@@ -99,6 +100,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         l.clear();
         adapter.clear();
         last = 0;
+        nbarch = 0;
 
     }
 
@@ -166,43 +168,20 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void loadData() {
-        if (adapter.getCount() < l.size())
+        if ((adapter.getCount() < l.size() && checkedArchived) || (adapter.getCount() < l.size() - nbarch && !checkedArchived))
         {
             List<Note> li = new ArrayList<Note>();
             int i;
             for(i = last; i < last + ITEM_PER_REQUEST -1 && i < l.size(); i++)
             {
-                if(l.get(i).isArchived() && checkedArchived || ! l.get(i).isArchived()){
+                if (l.get(i).isArchived() && checkedArchived || !l.get(i).isArchived()) {
                     li.add(l.get(i));
                 }
-
             }
             last = i;
             listView.addNewData(li);
         }
-        else listView.removeFooter();
     }
 
     @Override
@@ -240,7 +219,18 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
                 adapter.sort(new Comparator<Note>() {
                     @Override
                     public int compare(Note lhs, Note rhs) {
-                        return lhs.getLastModicationDate().compareTo(rhs.getLastModicationDate());
+                        if (lhs.getLastModicationDate() == null && rhs.getLastModicationDate() == null){
+                            return 0;
+                        }
+                        else if (lhs.getLastModicationDate() != null && rhs.getLastModicationDate() == null){
+                            return -1;
+                        }
+                        else if (lhs.getLastModicationDate() == null && rhs.getLastModicationDate() != null){
+                            return 1;
+                        }
+                        else{
+                            return lhs.getLastModicationDate().compareTo(rhs.getLastModicationDate());
+                        }
                     }
                 });
                 break;

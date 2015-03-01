@@ -77,6 +77,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/archived_note_check_text"
+            android:id="@+id/checkBox_archived" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_button"
+            android:text="@string/save_button"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:onClick="saveNote"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_button"
+            android:id="@+id/button2"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:onClick="removeNote"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">

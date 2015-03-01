@@ -2,7 +2,6 @@ package com.gp19.esgi.simplenotes;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -40,7 +39,6 @@ public class EndlessNoteListView extends ListView implements AbsListView.OnScrol
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
         if (listener != null)
         {
             if (getAdapter() == null)
@@ -73,9 +71,6 @@ public class EndlessNoteListView extends ListView implements AbsListView.OnScrol
         this.removeFooterView(footer);
     }
 
-    public void removeFooter(){
-        this.removeFooterView(footer);
-    }
 
     public void addNewData(List<?> data){
         this.removeFooterView(footer);
