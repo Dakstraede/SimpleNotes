@@ -23,17 +23,15 @@ import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
 public class MainActivity extends Activity implements EndlessNoteListView.EndlessListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, LoaderManager.LoaderCallbacks<List<?>>, AdapterView.OnItemSelectedListener{
     private static final int LOADER_ID = 1;
-    private final static int ITEM_PER_REQUEST = 3;
+    private final static int ITEM_PER_REQUEST = 7;
     public final static String MY_NOTE = "MY_NOTE";
     private SQLiteDatabase sqLiteDatabase;
     private NoteDataSource noteDataSource;
     private DBHelper helper;
-    private SearchView searchView;
     EndlessNoteListView listView;
     private EndlessAdapter adapter;
     private int last;
     private List<Note> l;
-    private Spinner spinner;
     private boolean checkedArchived;
     private int nbarch = 0;
 
@@ -51,10 +49,10 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         listView.setAdapter(adapter);
         listView.setListener(this);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        searchView = (SearchView) findViewById(R.id.searchView);
+        SearchView searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
-        spinner = (Spinner) findViewById(R.id.sort_spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.sort_spinner);
         spinner.setOnItemSelectedListener(this);
         getLoaderManager().initLoader(LOADER_ID, null, this);
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
@@ -72,7 +70,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-                intent.putExtra(MY_NOTE, (Note)adapter.getItem(position));
+                intent.putExtra(MY_NOTE, (Note) adapter.getItem(position));
                 startActivity(intent);
             }
         });
@@ -173,7 +171,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
         {
             List<Note> li = new ArrayList<Note>();
             int i;
-            for(i = last; i < last + ITEM_PER_REQUEST -1 && i < l.size(); i++)
+            for(i = last; i <= last + ITEM_PER_REQUEST && i < l.size(); i++)
             {
                 if (l.get(i).isArchived() && checkedArchived || !l.get(i).isArchived()) {
                     li.add(l.get(i));
@@ -182,6 +180,7 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
             last = i;
             listView.addNewData(li);
         }
+        listView.unsetLoadingView();
     }
 
     @Override

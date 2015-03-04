@@ -65,6 +65,10 @@ public class EndlessNoteListView extends ListView implements AbsListView.OnScrol
         this.addFooterView(footer);
     }
 
+    public void unsetLoadingView(){
+        this.removeFooterView(footer);
+    }
+
     public void setAdapter(EndlessAdapter adapter){
         super.setAdapter(adapter);
         this.adapter = adapter;

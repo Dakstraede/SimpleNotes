@@ -30,7 +30,7 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.gp19.esgi.simplenotes.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
     </application>
 

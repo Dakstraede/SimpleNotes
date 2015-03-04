@@ -6,7 +6,7 @@
     <string name="main_search_placeholder">Search</string>
     <string name="search_hint">Search notes from list</string>
     <string name="action_addNote">Add Note</string>
-    <string name="title_activity_add_note">AddNoteActivity</string>
+    <string name="title_activity_add_note">Add Note</string>
     <string name="note_title">Title</string>
     <string name="note_title_hint">Add a title here</string>
     <string name="note_content_hint">Add Text</string>
@@ -27,5 +27,5 @@
         <item>Last modidification date</item>
         <item>Importance</item>
     </string-array>
-    <string name="title_activity_edit_note">EditNoteActivity</string>
+    <string name="title_activity_edit_note">Edit Note</string>
 </resources>
