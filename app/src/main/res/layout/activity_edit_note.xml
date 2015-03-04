@@ -44,36 +44,27 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:weightSum="1">
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/importance_text"
+            android:layout_gravity="center_vertical"
             android:id="@+id/importance_text_view_edit"
-            android:layout_weight="10" />
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
 
         <Spinner
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/importance_edit_spinner"
-            android:layout_weight="10"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.2"
             android:prompt="@string/importance_prompt"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/group_text_edit"
-            android:layout_weight="10" />
-
-        <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner2"
-            android:layout_weight="10" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,6 +96,8 @@
             android:text="@string/remove_button"
             android:background="@drawable/add_button"
             android:id="@+id/button2"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
             android:onClick="removeNote"/>
