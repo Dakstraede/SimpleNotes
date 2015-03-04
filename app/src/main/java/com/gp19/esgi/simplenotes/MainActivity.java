@@ -181,6 +181,11 @@ public class MainActivity extends Activity implements EndlessNoteListView.Endles
             listView.addNewData(li);
         }
         listView.unsetLoadingView();
+        View spin = findViewById(R.id.sort_spinner);
+        Spinner spinner = (Spinner) spin;
+        int position = spinner.getSelectedItemPosition();
+        int id = spinner.getId();
+        this.onItemSelected(listView, spin, position, id);
     }
 
     @Override
