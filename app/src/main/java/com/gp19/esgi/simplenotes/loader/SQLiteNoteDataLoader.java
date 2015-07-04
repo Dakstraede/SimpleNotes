@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Mathieu on 22/02/2015.
  */
-public class SQLiteNoteDataLoader extends AbstractDataLoader<List<?>> {
+public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
 
     private NoteDataSource mDataSource;
     private String mSelection;
@@ -36,8 +36,7 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<?>> {
 //    }
 
     public List buildList(){
-        List list = mDataSource.read(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);
-        return list;
+        return mDataSource.read(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);
     }
 
     public void insert(Note entity){

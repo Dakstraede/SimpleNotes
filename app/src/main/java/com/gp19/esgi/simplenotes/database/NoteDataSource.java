@@ -25,7 +25,7 @@ public class NoteDataSource {
     public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
     public static final String TABLE_NOTE = "Note";
-    public static final String TABLE_GROUP = "GroupInfo";
+    public static final String TABLE_GROUP = "Category";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NOTE_TITLE = "noteTitle";
     public static final String COLUMN_NOTE_CONTENT = "noteContent";
@@ -33,10 +33,13 @@ public class NoteDataSource {
     public static final String COLUMN_NOTE_MODIFICATION = "lastModificationDate";
     public static final String COLUMN_NOTE_ARCHIVE = "isArchived";
     public static final String COLUMN_NOTE_IMPORTANCE = "importanceLevel";
-    public static final String COLUMN_GROUP_NAME = "groupName";
+    public static final String COLUMN_CATEGORY_NAME = "categoryName";
+    public static final String COLUMN_CATEGORY_DESCRIPTION = "categoryDescription";
     public static final String TABLE_LINK = "Linked";
     public static final String COLUMN_LINK_GROUP_ID = "groupId";
     public static final String COLUMN_LINK_NOTE_ID = "noteId";
+
+
 
     public static final String CREATE_NOTE_TABLE = "CREATE TABLE " + TABLE_NOTE +" ( " + COLUMN_ID + "  INTEGER NOT NULL " +
             " PRIMARY KEY AUTOINCREMENT, " +
@@ -55,17 +58,9 @@ public class NoteDataSource {
             " DEFAULT(0) " +
             "COLLATE BINARY);";
 
-    public static final String CREATE_TABLE_GROUP = "CREATE TABLE " + TABLE_GROUP + " ( " + COLUMN_ID + "  INTEGER NOT NULL  " +
-            " PRIMARY KEY AUTOINCREMENT, " +
-            " " + COLUMN_GROUP_NAME + " TEXT UNIQUE " +
-            " COLLATE BINARY);";
+    public static final String CREATE_TABLE_CATEGORY = String.format("CREATE TABLE %s ( %s  INTEGER NOT NULL   PRIMARY KEY AUTOINCREMENT,  %s TEXT UNIQUE  COLLATE BINARY, %s TEXT COLLATE BINARY);", TABLE_GROUP, COLUMN_ID, COLUMN_CATEGORY_NAME, COLUMN_CATEGORY_DESCRIPTION);
 
-    public static final String CREATE_LINK_TABLE = "CREATE TABLE " + TABLE_LINK + " ( " + COLUMN_LINK_GROUP_ID + " INTEGER NOT NULL  " +
-            " COLLATE BINARY, " +
-            " " + COLUMN_LINK_NOTE_ID + " INTEGER NOT NULL  " +
-            " COLLATE BINARY, " +
-            " CONSTRAINT PK_GROUP PRIMARY KEY( " + COLUMN_LINK_GROUP_ID + " ASC, " +
-            " " + COLUMN_LINK_NOTE_ID + " ASC))";
+    public static final String CREATE_LINK_TABLE = String.format("CREATE TABLE %s ( %s INTEGER NOT NULL   COLLATE BINARY,  %s INTEGER NOT NULL   COLLATE BINARY,  CONSTRAINT PK_GROUP PRIMARY KEY( %s ASC,  %s ASC))", TABLE_LINK, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID);
 
     public NoteDataSource(SQLiteDatabase database){
         this.mDatabase = database;
@@ -182,7 +177,7 @@ public class NoteDataSource {
     }
 
     public String[] getAllColumnsGroup() {
-        return new String[] {COLUMN_ID, COLUMN_GROUP_NAME};
+        return new String[] {COLUMN_ID, COLUMN_CATEGORY_NAME, COLUMN_CATEGORY_DESCRIPTION};
     }
 
     public String[] getAllColumnsLink(){
@@ -194,7 +189,7 @@ public class NoteDataSource {
             return null;
         }
 
-        return new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_GROUP_NAME)));
+        return new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY_NAME)));
     }
 
 
@@ -255,7 +250,7 @@ public class NoteDataSource {
             return null;
         }
         ContentValues values = new ContentValues();
-        values.put(COLUMN_GROUP_NAME, noteGroup.getGroupName());
+        values.put(COLUMN_CATEGORY_NAME, noteGroup.getGroupName());
         return values;
     }
 

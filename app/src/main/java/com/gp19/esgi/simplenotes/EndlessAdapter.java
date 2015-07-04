@@ -32,6 +32,7 @@ public class EndlessAdapter extends ArrayAdapter {
     @Override
     public Object getItem(int position) {
         return itemList.get(position);
+
     }
 
 

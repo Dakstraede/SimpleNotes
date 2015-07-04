@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/rootLayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,10 +52,7 @@
         android:text="@string/archived_check"
         android:id="@+id/checkBox"
         android:checked="false"
-        android:clickable="true"/>
-
-    <com.gp19.esgi.simplenotes.EndlessNoteListView android:id="@+id/el"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:clickable="true"
+        />
 
 </LinearLayout>

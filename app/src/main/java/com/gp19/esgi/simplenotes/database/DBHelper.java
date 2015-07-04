@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NoteDataSource.CREATE_NOTE_TABLE);
-        db.execSQL(NoteDataSource.CREATE_TABLE_GROUP);
+        db.execSQL(NoteDataSource.CREATE_TABLE_CATEGORY);
         db.execSQL(NoteDataSource.CREATE_LINK_TABLE);
     }
 }

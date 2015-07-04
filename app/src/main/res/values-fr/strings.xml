@@ -25,4 +25,5 @@
     <string name="modif_label">Modifiée le </string>
     <string name="remove_button">Supprimer</string>
     <string name="save_button">Enregistrer</string>
+    <string name="archived_note_check_text">Archivée</string>
 </resources>

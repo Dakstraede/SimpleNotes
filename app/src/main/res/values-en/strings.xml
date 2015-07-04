@@ -14,7 +14,7 @@
     <string-array name="sort_array">
         <item>Title</item>
         <item>Creation date</item>
-        <item>Last modidification date</item>
+        <item>Last modification date</item>
         <item>Importance</item>
     </string-array>
     <string name="sort_prompt">Sort by</string>

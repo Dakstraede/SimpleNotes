@@ -13,4 +13,6 @@
     <string name="sort_prompt">Odernar por</string>
     <string name="archived_check"></string>
     <string name="create_label">Criado</string>
+    <string name="archived_note_check_text">Archivado</string>
+    <string name="importance_prompt">Selectionnar importancia</string>
 </resources>
