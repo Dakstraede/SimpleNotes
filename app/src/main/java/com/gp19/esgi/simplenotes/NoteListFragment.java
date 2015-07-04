@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.text.TextUtils;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class NoteListFragment extends ListFragment implements LoaderManager.Load
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
+    private static View view;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,13 +46,22 @@ public class NoteListFragment extends ListFragment implements LoaderManager.Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.endless_list_layout, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.endless_list_layout, container, false);
+        } catch (InflateException e) {
+        }
+        return view;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: Change Adapter to display your content
         listNotes = new ArrayList<>();
     }
 
@@ -59,9 +70,13 @@ public class NoteListFragment extends ListFragment implements LoaderManager.Load
         super.onActivityCreated(savedInstanceState);
         EndlessAdapter adapter = new EndlessAdapter(getActivity(), new ArrayList<Note>(), R.layout.row_layout);
         setListAdapter(adapter);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -88,7 +103,7 @@ public class NoteListFragment extends ListFragment implements LoaderManager.Load
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(((Note) getListAdapter().getItem(position)));
         }
     }
 
@@ -103,8 +118,7 @@ public class NoteListFragment extends ListFragment implements LoaderManager.Load
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(Note selectedNote);
     }
 
     @Override

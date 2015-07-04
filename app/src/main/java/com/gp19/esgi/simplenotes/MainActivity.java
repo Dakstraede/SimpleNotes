@@ -1,15 +1,18 @@
 package com.gp19.esgi.simplenotes;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Comparator;
 import java.util.List;
@@ -17,16 +20,13 @@ import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 
 
-public class MainActivity extends Activity implements NoteListFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, AdapterView.OnItemSelectedListener{
+public class MainActivity extends FragmentActivity implements NoteListFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener,SearchView.OnCloseListener, AdapterView.OnItemSelectedListener{
     public final static int ITEM_PER_REQUEST = 7;
     public final static String MY_NOTE = "MY_NOTE";
     private SQLiteDatabase sqLiteDatabase;
     public NoteDataSource noteDataSource;
     private DBHelper helper;
-    public int last;
-    private List<Note> l;
     public boolean checkedArchived;
-    public int nbarch = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +36,21 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);
 
+        if (findViewById(R.id.rootLayout) != null)
+        {
+            if (savedInstanceState != null){
+                return;
+            }
+        }
 
-        SearchView searchView = (SearchView) findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-        Spinner spinner = (Spinner) findViewById(R.id.sort_spinner);
-        spinner.setOnItemSelectedListener(this);
 
-        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
+//        SearchView searchView = (SearchView) findViewById(R.id.searchView);
+//        searchView.setOnQueryTextListener(this);
+//        searchView.setOnCloseListener(this);
+//        Spinner spinner = (Spinner) findViewById(R.id.sort_spinner);
+//        spinner.setOnItemSelectedListener(this);
+//
+//        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
 //        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -62,11 +69,11 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 //                startActivity(intent);
 //            }
 //        });
-
         FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
-        NoteListFragment noteListFragment = new NoteListFragment();
-        fragmentTransaction.add(R.id.rootLayout, noteListFragment, "NoteListFragment");
+        MainFragment mainFragment = new MainFragment();
+        fragmentTransaction.add(R.id.rootLayout, mainFragment, "MainFragment");
         fragmentTransaction.commit();
+
     }
 
 
@@ -81,10 +88,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     @Override
     public boolean onQueryTextSubmit(String query) {
         ((NoteListFragment) getFragmentManager().findFragmentByTag("NoteListFragment")).displayResult(query);
-//        if (listView.setListener() != null)
-//        {
-//            listView.setListener(null);
-//        }
 
 
         return true;
@@ -93,10 +96,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     @Override
     public boolean onQueryTextChange(String newText) {
         ((NoteListFragment) getFragmentManager().findFragmentByTag("NoteListFragment")).displayResult(newText);
-//        if (listView.setListener() != null)
-//        {
-//            listView.setListener(null);
-//        }
         return true;
     }
 
@@ -177,7 +176,26 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
-        Log.i("AAAAAAAAA", "BBBBBBBB");
+    public void onFragmentInteraction(Note selectedNote) {
+        Toast.makeText(this,
+                selectedNote.getNoteTitle(),
+                Toast.LENGTH_SHORT).show();
+
+        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+        DetailsNoteFragment detailsNoteFragment = DetailsNoteFragment.newInstance(selectedNote);
+        fragmentTransaction.replace(R.id.rootLayout, detailsNoteFragment, "NoteDetailsFragment");
+        fragmentTransaction.addToBackStack("A_B");
+        fragmentTransaction.commit();
+
     }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().findFragmentByTag("MainFragment") != null)
+        {
+            getFragmentManager().popBackStackImmediate("A_B", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        else super.onBackPressed();
+    }
+
 }
