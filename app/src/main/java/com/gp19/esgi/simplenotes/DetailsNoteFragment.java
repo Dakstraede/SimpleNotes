@@ -37,10 +37,6 @@ public class DetailsNoteFragment extends Fragment {
     private EditText content;
     private Spinner importance;
     private Spinner group;
-    private TextView creationDate;
-    private TextView lastModification;
-    private boolean modified ;
-    private CheckBox checkArchived;
 
     public static DetailsNoteFragment newInstance(Note note){
         DetailsNoteFragment fragment = new DetailsNoteFragment();
@@ -69,8 +65,6 @@ public class DetailsNoteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        modified = false;
     }
 
     @Override
@@ -81,27 +75,16 @@ public class DetailsNoteFragment extends Fragment {
 
         mNote = getArguments().getParcelable(KEY);
         View view = inflater.inflate(R.layout.fragment_details_note, container, false);
-
-        Button saveButton = ((Button) view.findViewById(R.id.save_button));
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveNote();
-            }
-        });
-
         title = (EditText) view.findViewById(R.id.edit_title);
         content = (EditText) view.findViewById(R.id.edit_content);
         importance = (Spinner) view.findViewById(R.id.importance_edit_spinner);
         adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item, items);
         importance.setAdapter(adapter);
-        creationDate = (TextView) view.findViewById(R.id.creation_date_label);
-        lastModification = (TextView) view.findViewById(R.id.modification_date_label);
-        checkArchived = (CheckBox) view.findViewById(R.id.checkBox_archived);
+        TextView creationDate = (TextView) view.findViewById(R.id.creation_date_label);
+        TextView lastModification = (TextView) view.findViewById(R.id.modification_date_label);
         if(mNote != null){
             title.setText(mNote.getNoteTitle());
             content.setText(mNote.getNoteContent());
-            checkArchived.setChecked(mNote.isArchived());
             for(int i = 0; i < importance.getAdapter().getCount(); i++){
                 if ((Integer)importance.getAdapter().getItem(i) == mNote.getImportanceLevel()){
                     importance.setSelection(i);
@@ -122,7 +105,6 @@ public class DetailsNoteFragment extends Fragment {
         mNote.setNoteTitle(title.getText().toString());
         mNote.setNoteContent(content.getText().toString());
         mNote.setLastModicationDate();
-        mNote.setArchived(checkArchived.isChecked());
         mNote.setImportanceLevel((Integer)importance.getSelectedItem());
         DBHelper helper = new DBHelper(getActivity());
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
@@ -159,6 +141,13 @@ public class DetailsNoteFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.remove_item:
                 removeNote();
+                return true;
+            case R.id.archive_item:
+                mNote.setArchived(true);
+                saveNote();
+                return true;
+            case R.id.done_edit:
+                saveNote();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -9,12 +9,5 @@
         android:showAsAction="ifRoom"
         android:title="ADD">
     </item>
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/abc_btn_radio_to_on_mtrl_000"
-        android:showAsAction="never"
-        android:orderInCategory="9999"
-        android:title="ABOUT">
-    </item>
 
 </menu>

@@ -9,4 +9,19 @@
         android:title="@string/remove_button">
     </item>
 
+    <item
+        android:id="@+id/archive_item"
+        android:icon="@drawable/ic_archive_white_24dp"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="@string/archived_note_check_text">
+    </item>
+
+    <item
+        android:id="@+id/done_edit"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="@string/save_button">
+    </item>
 </menu>

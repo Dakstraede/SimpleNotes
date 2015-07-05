@@ -17,7 +17,7 @@
     <string name="modif_label">Modified on</string>
     <string name="save_button">Save</string>
     <string name="remove_button">Remove</string>
-    <string name="archived_note_check_text">Archived</string>
+    <string name="archived_note_check_text">Archive</string>
 
     <string-array name="sort_array">
         <item>Title</item>
