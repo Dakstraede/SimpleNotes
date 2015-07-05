@@ -85,18 +85,21 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         EndlessAdapter adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
         setListAdapter(adapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        SearchView searchView = (SearchView) getActivity().findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
-        spinner.setOnItemSelectedListener(this);
-        CheckBox checkBox = (CheckBox) getActivity().findViewById(R.id.checkBox);
+        if (getFragmentManager().findFragmentByTag("MainFragment").getView() != null)
+        {
+            SearchView searchView = (SearchView) getActivity().findViewById(R.id.searchView);
+            searchView.setOnQueryTextListener(this);
+            searchView.setOnCloseListener(this);
+            Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
+            spinner.setOnItemSelectedListener(this);
+            CheckBox checkBox = (CheckBox) getActivity().findViewById(R.id.checkBox);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     updateListonCheckStatusChange(isChecked);
                 }
             });
+        }
     }
 
     @Override

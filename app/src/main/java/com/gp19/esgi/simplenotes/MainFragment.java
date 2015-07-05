@@ -38,7 +38,6 @@ public class MainFragment extends Fragment{
         return view;
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.activity_itemlist, menu);

@@ -69,11 +69,4 @@
             android:layout_weight="0.2" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/save_new_note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_save"
-        android:background="@drawable/add_button"/>
-
 </LinearLayout>

@@ -4,18 +4,10 @@
     android:layout_height="wrap_content"
     android:id="@+id/main_fragment"
     >
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutsub">
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
