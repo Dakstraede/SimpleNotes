@@ -8,15 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layoutsub">
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchView"
-            android:queryHint="@string/main_search_placeholder"
-            android:layout_weight="1" />
 
         <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/sort_spinner"
             android:layout_weight="4"

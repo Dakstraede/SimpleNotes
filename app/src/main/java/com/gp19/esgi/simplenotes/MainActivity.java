@@ -21,7 +21,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+//        getActionBar().setDisplayHomeAsUpEnabled(false);
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);

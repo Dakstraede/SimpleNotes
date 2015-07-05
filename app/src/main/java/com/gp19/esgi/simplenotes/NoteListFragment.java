@@ -2,6 +2,7 @@ package com.gp19.esgi.simplenotes;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -67,6 +69,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         }
         try {
             view = inflater.inflate(R.layout.endless_list_layout, container, false);
+            setHasOptionsMenu(true);
         } catch (InflateException e) {
         }
         return view;
@@ -87,9 +90,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         getLoaderManager().initLoader(LOADER_ID, null, this);
         if (getFragmentManager().findFragmentByTag("MainFragment").getView() != null)
         {
-            SearchView searchView = (SearchView) getActivity().findViewById(R.id.searchView);
-            searchView.setOnQueryTextListener(this);
-            searchView.setOnCloseListener(this);
             Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
             spinner.setOnItemSelectedListener(this);
             CheckBox checkBox = (CheckBox) getActivity().findViewById(R.id.checkBox);
@@ -270,4 +270,34 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        if (menu.findItem(R.id.action_search) == null){
+            inflater.inflate(R.menu.activity_itemlist, menu);
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+            SearchView searchView = (SearchView)searchItem.getActionView();
+            searchView.setQueryHint(getResources().getString(R.string.search_hint));
+            searchView.setOnCloseListener(this);
+            searchView.setOnQueryTextListener(this);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.add_item:
+                FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+                AddNoteFragment addNoteFragment = new AddNoteFragment();
+                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "AddNoteFragment");
+                fragmentTransaction.addToBackStack("ADDNOTE");
+                fragmentTransaction.commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
