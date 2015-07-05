@@ -1,11 +1,12 @@
 package com.gp19.esgi.simplenotes;
-
-
 import android.app.FragmentManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -76,6 +77,7 @@ public class DetailsNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
 
         mNote = getArguments().getParcelable(KEY);
         View view = inflater.inflate(R.layout.fragment_details_note, container, false);
@@ -87,15 +89,6 @@ public class DetailsNoteFragment extends Fragment {
                 saveNote();
             }
         });
-
-        final Button deleteButton = ((Button) view.findViewById(R.id.button2));
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeNote();
-            }
-        });
-
 
         title = (EditText) view.findViewById(R.id.edit_title);
         content = (EditText) view.findViewById(R.id.edit_content);
@@ -154,5 +147,21 @@ public class DetailsNoteFragment extends Fragment {
         returnMain();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.note_details_menu, menu);
+    }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.remove_item:
+                removeNote();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

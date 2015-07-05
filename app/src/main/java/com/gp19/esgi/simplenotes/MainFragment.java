@@ -2,6 +2,7 @@ package com.gp19.esgi.simplenotes;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -35,19 +36,6 @@ public class MainFragment extends Fragment{
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         getFragmentManager().beginTransaction().add(R.id.main_fragment, new NoteListFragment(), "NoteListFragment").commit();
         return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        NoteListFragment fragment = ((NoteListFragment) getFragmentManager().findFragmentByTag("NoteListFragment"));
-        if (fragment != null && !getActivity().isDestroyed()) {
-            FragmentManager fr = getFragmentManager();
-            if (fr != null) {
-
-                fr.beginTransaction().remove(fragment).commit();
-            }
-        }
     }
 
 
