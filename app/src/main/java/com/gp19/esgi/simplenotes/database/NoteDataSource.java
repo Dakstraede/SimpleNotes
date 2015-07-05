@@ -3,7 +3,6 @@ package com.gp19.esgi.simplenotes.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.gp19.esgi.simplenotes.Note;
 import com.gp19.esgi.simplenotes.NoteGroup;
@@ -11,8 +10,6 @@ import com.gp19.esgi.simplenotes.NoteGroup;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -263,8 +260,8 @@ public class NoteDataSource {
         values.put(COLUMN_NOTE_CONTENT, note.getNoteContent());
         values.put(COLUMN_NOTE_ARCHIVE, note.isArchived());
         values.put(COLUMN_NOTE_CREATION, sdf.format(note.getCreationDate()));
-        if (note.getLastModicationDate() != null){
-            values.put(COLUMN_NOTE_MODIFICATION, sdf.format(note.getLastModicationDate()));
+        if (note.getLastModificationDate() != null){
+            values.put(COLUMN_NOTE_MODIFICATION, sdf.format(note.getLastModificationDate()));
         }
         values.put(COLUMN_NOTE_CREATION, sdf.format(note.getCreationDate()));
         values.put(COLUMN_NOTE_IMPORTANCE, note.getImportanceLevel());

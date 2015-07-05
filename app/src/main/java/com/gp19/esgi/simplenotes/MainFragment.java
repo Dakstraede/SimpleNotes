@@ -1,23 +1,18 @@
 package com.gp19.esgi.simplenotes;
-
-
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment{
 
-    private static View view;
-
+//    private static View view;
 
     public MainFragment() {
         // Required empty public constructor
@@ -32,18 +27,18 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null)
-                parent.removeView(view);
-        }
-        try {
-            view = inflater.inflate(R.layout.main_fragment, container, false);
-        } catch (InflateException e) {
-        /* map is already there, just return view as it is */
-        }
+        View view = inflater.inflate(R.layout.main_fragment, container, false);
+
+        getFragmentManager().beginTransaction().add(R.id.main_fragment, new NoteListFragment(), "NoteListFragment").commit();
         return view;
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NoteListFragment fragment = ((NoteListFragment) getFragmentManager().findFragmentByTag("NoteListFragment"));
+        if (fragment != null){
+            getFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+    }
 }

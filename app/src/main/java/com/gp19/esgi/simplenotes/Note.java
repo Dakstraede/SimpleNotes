@@ -84,7 +84,7 @@ public class Note implements Parcelable {
         return creationDate;
     }
 
-    public Date getLastModicationDate() {
+    public Date getLastModificationDate() {
         return lastModicationDate;
     }
 

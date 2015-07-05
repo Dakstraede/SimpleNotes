@@ -30,6 +30,11 @@ public class EndlessAdapter extends ArrayAdapter {
     }
 
     @Override
+    public void clear() {
+        this.itemList.clear();
+    }
+
+    @Override
     public Object getItem(int position) {
         return itemList.get(position);
 

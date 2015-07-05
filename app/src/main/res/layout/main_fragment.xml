@@ -51,10 +51,4 @@
         android:checked="false"
         android:clickable="true"
         />
-
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.gp19.esgi.simplenotes.NoteListFragment"
-        android:id="@+id/main_fragment_list"/>
 </LinearLayout>

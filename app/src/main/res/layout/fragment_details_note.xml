@@ -88,8 +88,7 @@
             android:text="@string/save_button"
             android:background="@drawable/add_button"
             android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:onClick="saveNote"/>
+            android:layout_marginLeft="15dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -101,8 +100,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:onClick="removeNote"/>
+            android:layout_marginLeft="15dp" />
     </LinearLayout>
 
     <LinearLayout
