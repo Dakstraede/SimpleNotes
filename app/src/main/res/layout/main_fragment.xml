@@ -9,15 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/action_addNote"
-            android:background="@drawable/add_button"
-            android:textStyle="italic"
-            android:typeface="normal"
-            android:onClick="addNote"/>
-
     </LinearLayout>
 
     <LinearLayout

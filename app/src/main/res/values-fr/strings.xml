@@ -26,4 +26,5 @@
     <string name="remove_button">Supprimer</string>
     <string name="save_button">Enregistrer</string>
     <string name="archived_note_check_text">Archivée</string>
+    <string name="last_not_modified">Non modifiée</string>
 </resources>

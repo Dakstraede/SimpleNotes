@@ -119,7 +119,7 @@ public class DetailsNoteFragment extends Fragment {
             if (mNote.getLastModificationDate() != null){
                 lastModification.setText(smp.format(mNote.getLastModificationDate()));
             }
-            else lastModification.setText("Not modified yet");
+            else lastModification.setText(R.string.last_not_modified);
         }
 
         return view;

@@ -1,16 +1,18 @@
 package com.gp19.esgi.simplenotes;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
 import android.view.View;
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 
 
-public class MainActivity extends FragmentActivity implements NoteListFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements NoteListFragment.OnFragmentInteractionListener{
     private SQLiteDatabase sqLiteDatabase;
     public NoteDataSource noteDataSource;
     private DBHelper helper;
@@ -19,6 +21,7 @@ public class MainActivity extends FragmentActivity implements NoteListFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);
@@ -57,11 +60,6 @@ public class MainActivity extends FragmentActivity implements NoteListFragment.O
         sqLiteDatabase.close();
     }
 
-    public void addNote(View view) {
-        Intent intent = new Intent(this, AddNoteActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public void onFragmentInteraction(Note selectedNote) {
         FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
@@ -80,4 +78,15 @@ public class MainActivity extends FragmentActivity implements NoteListFragment.O
         else super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_action_bar, menu);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+
+        return true;
+    }
 }
