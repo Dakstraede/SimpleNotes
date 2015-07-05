@@ -1,4 +1,6 @@
 package com.gp19.esgi.simplenotes;
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -39,10 +41,15 @@ public class MainFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
         NoteListFragment fragment = ((NoteListFragment) getFragmentManager().findFragmentByTag("NoteListFragment"));
-        if (fragment != null){
-            getFragmentManager().beginTransaction().remove(fragment).commit();
+        if (fragment != null && !getActivity().isDestroyed()) {
+            FragmentManager fr = getFragmentManager();
+            if (fr != null) {
+
+                fr.beginTransaction().remove(fragment).commit();
+            }
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -56,7 +63,7 @@ public class MainFragment extends Fragment{
             case R.id.add_item:
                 FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
                 AddNoteFragment addNoteFragment = new AddNoteFragment();
-                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "NoteDetailsFragment");
+                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "AddNoteFragment");
                 fragmentTransaction.addToBackStack("ADDNOTE");
                 fragmentTransaction.commit();
                 return true;

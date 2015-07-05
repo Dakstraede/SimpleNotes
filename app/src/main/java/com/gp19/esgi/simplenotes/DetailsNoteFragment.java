@@ -141,7 +141,7 @@ public class DetailsNoteFragment extends Fragment {
     }
 
     private void returnMain(){
-        getFragmentManager().popBackStack("MAIN", 0);
+        getFragmentManager().popBackStack("A_B", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public void removeNote(){

@@ -1,6 +1,7 @@
 package com.gp19.esgi.simplenotes;
 
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class AddNoteFragment extends Fragment {
     }
 
     private void returnMain(){
-        getFragmentManager().popBackStack("MAIN", 0);
+        getFragmentManager().popBackStack("ADDNOTE", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
 

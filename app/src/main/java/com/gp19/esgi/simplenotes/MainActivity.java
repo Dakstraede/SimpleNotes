@@ -33,7 +33,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
         }
         FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
         MainFragment mainFragment = new MainFragment();
-        fragmentTransaction.addToBackStack("MAIN");
         fragmentTransaction.add(R.id.rootLayout, mainFragment, "MainFragment");
         fragmentTransaction.commit();
     }
@@ -71,9 +70,12 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().findFragmentByTag("MainFragment") != null)
+        if(getFragmentManager().findFragmentByTag("NoteDetailsFragment") != null)
         {
-            getFragmentManager().popBackStackImmediate("A_B", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            getFragmentManager().popBackStack("A_B", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        else if(getFragmentManager().findFragmentByTag("AddNoteFragment") != null){
+            getFragmentManager().popBackStack("ADDNOTE", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         else super.onBackPressed();
     }
