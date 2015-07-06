@@ -27,4 +27,5 @@
     <string name="save_button">Save</string>
     <string name="archived_note_check_text">Archive</string>
     <string name="last_not_modified">Not modified yet</string>
+    <string name="num_selected_items">selected</string>
 </resources>

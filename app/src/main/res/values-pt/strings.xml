@@ -16,4 +16,5 @@
     <string name="archived_note_check_text">Archivar</string>
     <string name="importance_prompt">Selectionnar importancia</string>
     <string name="last_not_modified">Ainda não alterada</string>
+    <string name="num_selected_items">selectado(s)</string>
 </resources>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -44,7 +46,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
-    private static View view;
+    private static EndlessNoteListView view;
     private boolean checked;
 
     /**
@@ -69,7 +71,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 parent.removeView(view);
         }
         try {
-            view = inflater.inflate(R.layout.endless_list_layout, container, false);
+            view = ((EndlessNoteListView) inflater.inflate(R.layout.endless_list_layout, container, false));
             setHasOptionsMenu(true);
         } catch (InflateException e) {
         }
@@ -83,7 +85,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         EndlessAdapter adapter;
         if (savedInstanceState == null){
             listNotes = new ArrayList<>();
-              adapter= new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
+            adapter= new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
         }
         else {
             listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
@@ -108,12 +110,79 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                     updateListonCheckStatusChange(isChecked);
                 }
             });
+            getListView().setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                private int r;
+
+                @Override
+                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+                    if (checked) {
+                        r++;
+                        ((EndlessAdapter) getListAdapter()).setNewSelection(position, checked);
+                    } else {
+                        r--;
+                        ((EndlessAdapter) getListAdapter()).removeSelection(position);
+                    }
+                    mode.setTitle(r + " " + getResources().getString(R.string.num_selected_items));
+                }
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    r = 0;
+                    MenuInflater inflater = getActivity().getMenuInflater();
+                    inflater.inflate(R.menu.contextual_menu_main, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.remove_item_context:
+                            r = 0;
+
+                            ((EndlessAdapter) getListAdapter()).deleteSelectedItems();
+                            ((EndlessAdapter) getListAdapter()).clearSelection();
+                            restartLoader();
+                            mode.finish();
+                        case R.id.archive_item_context:
+                            r = 0;
+                            ((EndlessAdapter) getListAdapter()).archiveSelectedItems();
+                            ((EndlessAdapter) getListAdapter()).clearSelection();
+                            restartLoader();
+                            mode.finish();
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    ((EndlessAdapter) getListAdapter()).clearSelection();
+                }
+            });
+
+            getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    getListView().setItemChecked(position, !((EndlessAdapter) getListAdapter()).isPositionChecked(position));
+                    return false;
+                }
+            });
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    private void restartLoader()
+    {
+        getLoaderManager().destroyLoader(LOADER_ID);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -281,9 +350,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 public boolean onQueryTextSubmit(String query) {
                     displayResult(query);
                     return true;
-
                 }
-
                 @Override
                 public boolean onQueryTextChange(String newText) {
                         displayResult(newText);
