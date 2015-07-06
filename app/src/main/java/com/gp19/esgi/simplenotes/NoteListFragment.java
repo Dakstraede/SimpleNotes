@@ -38,8 +38,9 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class NoteListFragment extends ListFragment implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<List<Note>>, SearchView.OnQueryTextListener,SearchView.OnCloseListener {
-
+public class NoteListFragment extends ListFragment implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<List<Note>>, SearchView.OnCloseListener {
+    private static final String KEY_NOTES = "NOTES";
+    private static final String SEARCH_QUERY = "SEARCH_QUERY";
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
@@ -79,15 +80,23 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listNotes = new ArrayList<>();
+        EndlessAdapter adapter;
+        if (savedInstanceState == null){
+            listNotes = new ArrayList<>();
+              adapter= new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
+        }
+        else {
+            listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
+            adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<>(listNotes), R.layout.row_layout);
+        }
+        this.setListAdapter(adapter);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EndlessAdapter adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
-        setListAdapter(adapter);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        this.getLoaderManager().initLoader(LOADER_ID, null, this);
         if (getFragmentManager().findFragmentByTag("MainFragment").getView() != null)
         {
             Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
@@ -154,7 +163,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         return new SQLiteNoteDataLoader(getActivity().getApplicationContext(), ((MainActivity) getActivity()).noteDataSource, null, null, null, null, null);
     }
     private void addData(){
-        EndlessAdapter adapter = (EndlessAdapter) getListAdapter();
+        EndlessAdapter adapter = (EndlessAdapter) this.getListAdapter();
         for (Note tmpNote : listNotes)
         {
             if (tmpNote.isArchived() && this.checked || !tmpNote.isArchived())
@@ -167,17 +176,18 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onResume() {
         super.onResume();
-        ((EndlessAdapter) getListAdapter()).clear();
-        addData();
-        ((EndlessAdapter) getListAdapter()).notifyDataSetChanged();
+        ((EndlessAdapter) this.getListAdapter()).clear();
+        this.addData();
+        ((EndlessAdapter) this.getListAdapter()).notifyDataSetChanged();
+
     }
 
     @Override
     public void onLoadFinished(Loader<List<Note>> loader, List<Note> data) {
-        listNotes.clear();
-        ((EndlessAdapter) getListAdapter()).clear();
-        listNotes.addAll(data);
-        addData();
+        this.listNotes.clear();
+        ((EndlessAdapter) this.getListAdapter()).clear();
+        this.listNotes.addAll(data);
+        this.addData();
     }
 
     @Override
@@ -187,36 +197,23 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     }
 
     public void displayResult(String query){
-        ((EndlessAdapter) getListAdapter()).clear();
+        ((EndlessAdapter) this.getListAdapter()).clear();
         if (!TextUtils.isEmpty(query)){
             for (Note tmpNote : listNotes)
             {
                 if (tmpNote.getNoteTitle().toLowerCase().contains(query.toLowerCase()) && (((tmpNote.isArchived() && this.checked)) || !tmpNote.isArchived()))
                 {
-                    ((EndlessAdapter) getListAdapter()).add(tmpNote);
+                    ((EndlessAdapter) this.getListAdapter()).add(tmpNote);
                 }
             }
         }
-        else addData();
-        ((EndlessAdapter) getListAdapter()).notifyDataSetChanged();
+        else this.addData();
+        ((EndlessAdapter) this.getListAdapter()).notifyDataSetChanged();
 }
 
     @Override
     public boolean onClose() {
         return false;
-    }
-
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        displayResult(query);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        displayResult(newText);
-        return true;
     }
 
     @Override
@@ -273,16 +270,35 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        if (menu.findItem(R.id.action_search) == null){
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        if (menu.findItem(R.id.action_search) == null) {
             inflater.inflate(R.menu.activity_itemlist, menu);
             MenuItem searchItem = menu.findItem(R.id.action_search);
-            SearchView searchView = (SearchView)searchItem.getActionView();
-            searchView.setQueryHint(getResources().getString(R.string.search_hint));
-            searchView.setOnCloseListener(this);
-            searchView.setOnQueryTextListener(this);
-        }
+            final SearchView searchView = (SearchView) searchItem.getActionView();
+            final SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    displayResult(query);
+                    return true;
 
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                        displayResult(newText);
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(listener);
+            searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_NOTES, ((ArrayList<Note>) listNotes));
     }
 
     @Override

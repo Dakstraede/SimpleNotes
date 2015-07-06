@@ -1,4 +1,5 @@
 package com.gp19.esgi.simplenotes;
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -131,9 +132,10 @@ public class DetailsNoteFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.note_details_menu, menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

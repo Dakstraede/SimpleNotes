@@ -21,6 +21,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 //        getActionBar().setDisplayHomeAsUpEnabled(false);
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
@@ -80,15 +81,16 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
         else super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_action_bar, menu);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayShowHomeEnabled(false);
-        }
-
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        menu.clear();
+//        getMenuInflater().inflate(R.menu.main_action_bar, menu);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//            ActionBar actionBar = getActionBar();
+//            actionBar.setDisplayShowHomeEnabled(false);
+//        }
+//
+//        return true;
+//    }
 }

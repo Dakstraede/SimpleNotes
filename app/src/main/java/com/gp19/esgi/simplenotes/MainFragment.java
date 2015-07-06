@@ -34,8 +34,13 @@ public class MainFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         getFragmentManager().beginTransaction().add(R.id.main_fragment, new NoteListFragment(), "NoteListFragment").commit();
+//        setHasOptionsMenu(true);
         return view;
     }
 
-
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.main_action_bar, menu);
+//    }
 }
