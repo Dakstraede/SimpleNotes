@@ -7,25 +7,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class EndlessAdapter extends ArrayAdapter<Note> {
+public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
     private int layoutId;
     private HashMap<Integer, Boolean> mSelection = new HashMap<>();
+    ArrayList<Note> originalList;
+    private ArrayList<Note> filteredList;
+    private NoteFilter noteFilter;
 
 
-    public EndlessAdapter(Context context, List<Note> itemList, int layoutId)
+
+    public EndlessAdapter(Context context, ArrayList<Note> itemList, int layoutId)
     {
         super(context, layoutId, itemList);
         this.layoutId  = layoutId;
+        this.filteredList = itemList;
+        this.originalList = itemList;
+
+        getFilter();
     }
 
     public void setNewSelection(int position, boolean value){
@@ -50,6 +61,21 @@ public class EndlessAdapter extends ArrayAdapter<Note> {
     public void clearSelection(){
         mSelection = new HashMap<>();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return filteredList.size();
+    }
+
+    @Override
+    public Note getItem(int position) {
+        return filteredList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public void deleteSelectedItems(){
@@ -105,4 +131,48 @@ public class EndlessAdapter extends ArrayAdapter<Note> {
         }
         return result;
     }
+
+    @Override
+    public Filter getFilter() {
+        if (noteFilter == null){
+            noteFilter = new NoteFilter();
+        }
+        return noteFilter;
+    }
+
+    private class NoteFilter extends Filter{
+
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length()>0)
+            {
+                ArrayList<Note> tempList = new ArrayList<>();
+
+                for (Note note : originalList)
+                {
+                    if (note.getNoteTitle().toLowerCase().contains(constraint.toString().toLowerCase()))
+                    {
+                        tempList.add(note);
+                    }
+                }
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+            }
+            else {
+                filterResults.count = originalList.size();
+                filterResults.values = originalList;
+            }
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredList = ((ArrayList<Note>) results.values);
+            notifyDataSetChanged();
+        }
+    }
+
+
 }

@@ -33,7 +33,8 @@ public class MainFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
-        getFragmentManager().beginTransaction().add(R.id.main_fragment, new NoteListFragment(), "NoteListFragment").commit();
+
+        getFragmentManager().beginTransaction().add(R.id.main_fragment, NoteListFragment.newInstance(true), "NoteListFragment").commit();
 //        setHasOptionsMenu(true);
         return view;
     }

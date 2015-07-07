@@ -27,6 +27,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 
 
+import com.gp19.esgi.simplenotes.database.NoteDataSource;
 import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
 import java.util.ArrayList;
@@ -43,11 +44,12 @@ import java.util.List;
 public class NoteListFragment extends ListFragment implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<List<Note>>, SearchView.OnCloseListener {
     private static final String KEY_NOTES = "NOTES";
     private static final String SEARCH_QUERY = "SEARCH_QUERY";
+    private static  final String SHOW_ARCHIVED = "ARCHIVED";
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
     private static EndlessNoteListView view;
-    private boolean checked;
+    private boolean archived;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,15 +58,26 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     public NoteListFragment() {
     }
 
+
+    public static NoteListFragment newInstance(boolean showArchived){
+        NoteListFragment noteListFragment = new NoteListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(SHOW_ARCHIVED, showArchived);
+        noteListFragment.setArguments(bundle);
+        return noteListFragment;
+
+    }
+
     public void updateListonCheckStatusChange(boolean checked)
     {
-        ((EndlessAdapter) getListAdapter()).clear();
-        this.checked = checked;
-        addData();
+//        ((EndlessAdapter) getListAdapter()).clear();
+//        this.checked = checked;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null)
@@ -82,23 +95,20 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EndlessAdapter adapter;
-        if (savedInstanceState == null){
-            listNotes = new ArrayList<>();
-            adapter= new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
-        }
-        else {
-            listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
-            adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<>(listNotes), R.layout.row_layout);
-        }
-        this.setListAdapter(adapter);
+        archived = getArguments().getBoolean(SHOW_ARCHIVED);
+        this.getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        EndlessAdapter adapter;
+        if (savedInstanceState != null){
+            listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
+        }
+        adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
+        this.setListAdapter(adapter);
 
-        this.getLoaderManager().initLoader(LOADER_ID, null, this);
         if (getFragmentManager().findFragmentByTag("MainFragment").getView() != null)
         {
             Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
@@ -229,34 +239,22 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public Loader<List<Note>> onCreateLoader(int i, Bundle bundle) {
-        return new SQLiteNoteDataLoader(getActivity().getApplicationContext(), ((MainActivity) getActivity()).noteDataSource, null, null, null, null, null);
+        return new SQLiteNoteDataLoader(getActivity().getApplicationContext(),
+                ((MainActivity) getActivity()).noteDataSource, NoteDataSource.COLUMN_NOTE_ARCHIVE + "=?", new String[] { String.valueOf((archived) ? 1 : 0)}, null, null, null);
     }
-    private void addData(){
-        EndlessAdapter adapter = (EndlessAdapter) this.getListAdapter();
-        for (Note tmpNote : listNotes)
-        {
-            if (tmpNote.isArchived() && this.checked || !tmpNote.isArchived())
-            {
-                adapter.add(tmpNote);
-            }
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         ((EndlessAdapter) this.getListAdapter()).clear();
-        this.addData();
         ((EndlessAdapter) this.getListAdapter()).notifyDataSetChanged();
 
     }
 
     @Override
     public void onLoadFinished(Loader<List<Note>> loader, List<Note> data) {
-        this.listNotes.clear();
+        this.listNotes = new ArrayList<>(data);
         ((EndlessAdapter) this.getListAdapter()).clear();
-        this.listNotes.addAll(data);
-        this.addData();
+        ((EndlessAdapter) this.getListAdapter()).addAll(this.listNotes);
     }
 
     @Override
@@ -264,21 +262,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         ((EndlessAdapter) getListAdapter()).clear();
         listNotes.clear();
     }
-
-    public void displayResult(String query){
-        ((EndlessAdapter) this.getListAdapter()).clear();
-        if (!TextUtils.isEmpty(query)){
-            for (Note tmpNote : listNotes)
-            {
-                if (tmpNote.getNoteTitle().toLowerCase().contains(query.toLowerCase()) && (((tmpNote.isArchived() && this.checked)) || !tmpNote.isArchived()))
-                {
-                    ((EndlessAdapter) this.getListAdapter()).add(tmpNote);
-                }
-            }
-        }
-        else this.addData();
-        ((EndlessAdapter) this.getListAdapter()).notifyDataSetChanged();
-}
 
     @Override
     public boolean onClose() {
@@ -348,12 +331,12 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
             final SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    displayResult(query);
+                    ((EndlessAdapter) getListAdapter()).getFilter().filter(query);
                     return true;
                 }
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                        displayResult(newText);
+                    ((EndlessAdapter) getListAdapter()).getFilter().filter(newText);
                     return true;
                 }
             };
@@ -375,7 +358,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
             case R.id.add_item:
                 FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
                 AddNoteFragment addNoteFragment = new AddNoteFragment();
-                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "AddNoteFragment");
+//                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "AddNoteFragment");
                 fragmentTransaction.addToBackStack("ADDNOTE");
                 fragmentTransaction.commit();
                 return true;

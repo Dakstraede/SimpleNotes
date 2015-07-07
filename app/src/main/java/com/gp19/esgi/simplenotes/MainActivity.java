@@ -6,8 +6,12 @@ import android.app.FragmentTransaction;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 
@@ -22,20 +26,25 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String[] items = getResources().getStringArray(R.array.drawer_item_list);
+        DrawerLayout drawerLayout = ((DrawerLayout) findViewById(R.id.drawer_layout));
+        ListView drawList = ((ListView) findViewById(R.id.left_drawer));
+        drawList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, items));
+
 //        getActionBar().setDisplayHomeAsUpEnabled(false);
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);
-        if (findViewById(R.id.rootLayout) != null)
-        {
-            if (savedInstanceState != null){
-                return;
-            }
-        }
-        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
-        MainFragment mainFragment = new MainFragment();
-        fragmentTransaction.add(R.id.rootLayout, mainFragment, "MainFragment");
-        fragmentTransaction.commit();
+//        if (findViewById(R.id.rootLayout) != null)
+//        {
+//            if (savedInstanceState != null){
+//                return;
+//            }
+//        }
+//        FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
+//        MainFragment mainFragment = new MainFragment();
+//        fragmentTransaction.add(R.id.rootLayout, mainFragment, "MainFragment");
+//        fragmentTransaction.commit();
     }
 
     @Override
@@ -64,7 +73,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     public void onFragmentInteraction(Note selectedNote) {
         FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
         DetailsNoteFragment detailsNoteFragment = DetailsNoteFragment.newInstance(selectedNote);
-        fragmentTransaction.replace(R.id.rootLayout, detailsNoteFragment, "NoteDetailsFragment");
+//        fragmentTransaction.replace(R.id.rootLayout, detailsNoteFragment, "NoteDetailsFragment");
         fragmentTransaction.addToBackStack("A_B");
         fragmentTransaction.commit();
     }

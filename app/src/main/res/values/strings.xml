@@ -19,6 +19,10 @@
     <string name="remove_button">Remove</string>
     <string name="archived_note_check_text">Archive</string>
 
+    <string-array name="drawer_item_list">
+        <item>Notes</item>
+        <item>Archived notes</item>
+    </string-array>
     <string-array name="sort_array">
         <item>Title</item>
         <item>Creation date</item>
