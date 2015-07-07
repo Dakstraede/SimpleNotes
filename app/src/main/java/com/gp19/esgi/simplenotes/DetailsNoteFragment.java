@@ -1,18 +1,13 @@
 package com.gp19.esgi.simplenotes;
-import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -72,10 +67,10 @@ public class DetailsNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        setHasOptionsMenu(true);
 
         mNote = getArguments().getParcelable(KEY);
         View view = inflater.inflate(R.layout.fragment_details_note, container, false);
+        setHasOptionsMenu(true);
         title = (EditText) view.findViewById(R.id.edit_title);
         content = (EditText) view.findViewById(R.id.edit_content);
         importance = (Spinner) view.findViewById(R.id.importance_edit_spinner);
@@ -117,7 +112,7 @@ public class DetailsNoteFragment extends Fragment {
     }
 
     private void returnMain(){
-        getFragmentManager().popBackStack("A_B", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, NoteListFragment.newInstance(((MainActivity) getActivity()).lastSelected), "NoteListFragment").commit();
     }
 
     public void removeNote(){
@@ -131,10 +126,12 @@ public class DetailsNoteFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.note_details_menu, menu);
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mNote != null && mNote.isArchived()){
+            getActivity().getMenuInflater().inflate(R.menu.note_details_menu_archived, menu);
+        }
+        else getActivity().getMenuInflater().inflate(R.menu.note_details_menu, menu);
     }
 
     @Override
@@ -146,6 +143,10 @@ public class DetailsNoteFragment extends Fragment {
                 return true;
             case R.id.archive_item:
                 mNote.setArchived(true);
+                saveNote();
+                return true;
+            case R.id.unarchive_item:
+                mNote.setArchived(false);
                 saveNote();
                 return true;
             case R.id.done_edit:

@@ -48,7 +48,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
-    private static EndlessNoteListView view;
+//    private static View view;
     private boolean archived;
 
     /**
@@ -65,29 +65,22 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         bundle.putBoolean(SHOW_ARCHIVED, showArchived);
         noteListFragment.setArguments(bundle);
         return noteListFragment;
-
-    }
-
-    public void updateListonCheckStatusChange(boolean checked)
-    {
-//        ((EndlessAdapter) getListAdapter()).clear();
-//        this.checked = checked;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-        if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null)
-                parent.removeView(view);
-        }
-        try {
-            view = ((EndlessNoteListView) inflater.inflate(R.layout.endless_list_layout, container, false));
-            setHasOptionsMenu(true);
-        } catch (InflateException e) {
-        }
+//
+//
+//        if (view != null) {
+//            ViewGroup parent = (ViewGroup) view.getParent();
+//            if (parent != null)
+//                parent.removeView(view);
+//        }
+//        try {
+        View view = inflater.inflate(R.layout.endless_list_layout, container, false);
+        setHasOptionsMenu(true);
+//        } catch (InflateException e) {
+//        }
         return view;
     }
 
@@ -108,80 +101,70 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         }
         adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
         this.setListAdapter(adapter);
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
+        spinner.setOnItemSelectedListener(this);
+        getListView().setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            private int r;
 
-        if (getFragmentManager().findFragmentByTag("MainFragment").getView() != null)
-        {
-            Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
-            spinner.setOnItemSelectedListener(this);
-            CheckBox checkBox = (CheckBox) getActivity().findViewById(R.id.checkBox);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    updateListonCheckStatusChange(isChecked);
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+                if (checked) {
+                    r++;
+                    ((EndlessAdapter) getListAdapter()).setNewSelection(position, checked);
+                } else {
+                    r--;
+                    ((EndlessAdapter) getListAdapter()).removeSelection(position);
                 }
-            });
-            getListView().setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                private int r;
+                mode.setTitle(r + " " + getResources().getString(R.string.num_selected_items));
+            }
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                r = 0;
+                MenuInflater inflater = getActivity().getMenuInflater();
+                inflater.inflate(R.menu.contextual_menu_main, menu);
+                return true;
+            }
 
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
 
-                    if (checked) {
-                        r++;
-                        ((EndlessAdapter) getListAdapter()).setNewSelection(position, checked);
-                    } else {
-                        r--;
-                        ((EndlessAdapter) getListAdapter()).removeSelection(position);
-                    }
-                    mode.setTitle(r + " " + getResources().getString(R.string.num_selected_items));
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.remove_item_context:
+                        r = 0;
+
+                        ((EndlessAdapter) getListAdapter()).deleteSelectedItems();
+                        ((EndlessAdapter) getListAdapter()).clearSelection();
+                        restartLoader();
+                        mode.finish();
+                    case R.id.archive_item_context:
+                        r = 0;
+                        ((EndlessAdapter) getListAdapter()).archiveSelectedItems();
+                        ((EndlessAdapter) getListAdapter()).clearSelection();
+                        restartLoader();
+                        mode.finish();
                 }
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    r = 0;
-                    MenuInflater inflater = getActivity().getMenuInflater();
-                    inflater.inflate(R.menu.contextual_menu_main, menu);
-                    return true;
-                }
+                return false;
+            }
 
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                ((EndlessAdapter) getListAdapter()).clearSelection();
+            }
+        });
 
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.remove_item_context:
-                            r = 0;
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                getListView().setItemChecked(position, !((EndlessAdapter) getListAdapter()).isPositionChecked(position));
+                return false;
+            }
+        });
 
-                            ((EndlessAdapter) getListAdapter()).deleteSelectedItems();
-                            ((EndlessAdapter) getListAdapter()).clearSelection();
-                            restartLoader();
-                            mode.finish();
-                        case R.id.archive_item_context:
-                            r = 0;
-                            ((EndlessAdapter) getListAdapter()).archiveSelectedItems();
-                            ((EndlessAdapter) getListAdapter()).clearSelection();
-                            restartLoader();
-                            mode.finish();
-                    }
-                    return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    ((EndlessAdapter) getListAdapter()).clearSelection();
-                }
-            });
-
-            getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    getListView().setItemChecked(position, !((EndlessAdapter) getListAdapter()).isPositionChecked(position));
-                    return false;
-                }
-            });
-        }
     }
 
     @Override
@@ -241,13 +224,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     public Loader<List<Note>> onCreateLoader(int i, Bundle bundle) {
         return new SQLiteNoteDataLoader(getActivity().getApplicationContext(),
                 ((MainActivity) getActivity()).noteDataSource, NoteDataSource.COLUMN_NOTE_ARCHIVE + "=?", new String[] { String.valueOf((archived) ? 1 : 0)}, null, null, null);
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((EndlessAdapter) this.getListAdapter()).clear();
-        ((EndlessAdapter) this.getListAdapter()).notifyDataSetChanged();
-
     }
 
     @Override
@@ -322,10 +298,17 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        menu.clear();
+
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
+
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
         if (menu.findItem(R.id.action_search) == null) {
-            inflater.inflate(R.menu.activity_itemlist, menu);
+            getActivity().getMenuInflater().inflate(R.menu.activity_itemlist, menu);
             MenuItem searchItem = menu.findItem(R.id.action_search);
             final SearchView searchView = (SearchView) searchItem.getActionView();
             final SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
@@ -358,7 +341,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
             case R.id.add_item:
                 FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
                 AddNoteFragment addNoteFragment = new AddNoteFragment();
-//                fragmentTransaction.replace(R.id.rootLayout, addNoteFragment, "AddNoteFragment");
+                fragmentTransaction.replace(R.id.content_frame, addNoteFragment, "AddNoteFragment");
                 fragmentTransaction.addToBackStack("ADDNOTE");
                 fragmentTransaction.commit();
                 return true;

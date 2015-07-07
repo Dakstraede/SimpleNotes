@@ -1,8 +1,4 @@
 package com.gp19.esgi.simplenotes;
-
-
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -13,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -65,13 +60,12 @@ public class AddNoteFragment extends Fragment {
     }
 
     private void returnMain(){
-        getFragmentManager().popBackStack("ADDNOTE", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, NoteListFragment.newInstance(((MainActivity) getActivity()).lastSelected), "NoteListFragment").commit();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
         inflater.inflate(R.menu.add_item_menu, menu);
     }
 
