@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,13 +126,29 @@ public class DetailsNoteFragment extends Fragment {
         returnMain();
     }
 
+    private void duplicateNote(){
+        DBHelper helper = new DBHelper(getActivity());
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        NoteDataSource noteDataSource = new NoteDataSource(sqLiteDatabase);
+        noteDataSource.insert(new Note(mNote.getNoteTitle(), mNote.getNoteContent(), mNote.getImportanceLevel(), mNote.isArchived()));
+        helper.close();
+        sqLiteDatabase.close();
+        returnMain();
+    }
+
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mNote != null && mNote.isArchived()){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if (mNote.isArchived()){
             getActivity().getMenuInflater().inflate(R.menu.note_details_menu_archived, menu);
         }
         else getActivity().getMenuInflater().inflate(R.menu.note_details_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override
@@ -151,6 +168,9 @@ public class DetailsNoteFragment extends Fragment {
                 return true;
             case R.id.done_edit:
                 saveNote();
+                return true;
+            case R.id.note_duplicate:
+                duplicateNote();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

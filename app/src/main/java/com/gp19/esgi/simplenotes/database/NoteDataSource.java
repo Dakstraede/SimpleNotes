@@ -40,7 +40,7 @@ public class NoteDataSource {
 
     public static final String CREATE_NOTE_TABLE = "CREATE TABLE " + TABLE_NOTE +" ( " + COLUMN_ID + "  INTEGER NOT NULL " +
             " PRIMARY KEY AUTOINCREMENT, " +
-            " " + COLUMN_NOTE_TITLE + " TEXT UNIQUE " +
+            " " + COLUMN_NOTE_TITLE + " TEXT " +
             " COLLATE BINARY," +
             " " + COLUMN_NOTE_CONTENT + " TEXT COLLATE BINARY " +
             " NOT NULL, " +

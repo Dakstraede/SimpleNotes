@@ -9,7 +9,7 @@
     <string name="note_title_hint">Add a title here</string>
     <string name="note_content_hint">Add Text</string>
     <string name="button_save">Save</string>
-    <string name="action_addNote">Add Note</string>
+    <string name="action_addNote">Add note</string>
 
     <string-array name="sort_array">
         <item>Title</item>
@@ -28,4 +28,6 @@
     <string name="archived_note_check_text">Archive</string>
     <string name="last_not_modified">Not modified yet</string>
     <string name="num_selected_items">selected</string>
+    <string name="duplicate_note">Duplicate note</string>
+    <string name="empty_note_list">Empty list</string>
 </resources>

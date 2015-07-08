@@ -69,18 +69,8 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//
-//
-//        if (view != null) {
-//            ViewGroup parent = (ViewGroup) view.getParent();
-//            if (parent != null)
-//                parent.removeView(view);
-//        }
-//        try {
         View view = inflater.inflate(R.layout.endless_list_layout, container, false);
         setHasOptionsMenu(true);
-//        } catch (InflateException e) {
-//        }
         return view;
     }
 
@@ -122,7 +112,8 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 r = 0;
                 MenuInflater inflater = getActivity().getMenuInflater();
-                inflater.inflate(R.menu.contextual_menu_main, menu);
+                if (((MainActivity) getActivity()).lastSelected) inflater.inflate(R.menu.contextual_menu_main_archived, menu);
+                else inflater.inflate(R.menu.contextual_menu_main, menu);
                 return true;
             }
 
@@ -136,14 +127,26 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 switch (item.getItemId()) {
                     case R.id.remove_item_context:
                         r = 0;
-
                         ((EndlessAdapter) getListAdapter()).deleteSelectedItems();
                         ((EndlessAdapter) getListAdapter()).clearSelection();
                         restartLoader();
                         mode.finish();
                     case R.id.archive_item_context:
                         r = 0;
-                        ((EndlessAdapter) getListAdapter()).archiveSelectedItems();
+                        ((EndlessAdapter) getListAdapter()).archiveSelectedItems(true);
+                        ((EndlessAdapter) getListAdapter()).clearSelection();
+                        restartLoader();
+                        mode.finish();
+                    case R.id.undo_archive_item_context:
+                        r = 0;
+                        ((EndlessAdapter) getListAdapter()).archiveSelectedItems(false);
+                        ((EndlessAdapter) getListAdapter()).clearSelection();
+                        restartLoader();
+                        mode.finish();
+
+                    case R.id.note_duplicate_context:
+                        r = 0;
+                        ((EndlessAdapter) getListAdapter()).duplicateSelectedItems();
                         ((EndlessAdapter) getListAdapter()).clearSelection();
                         restartLoader();
                         mode.finish();
@@ -342,7 +345,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
                 AddNoteFragment addNoteFragment = new AddNoteFragment();
                 fragmentTransaction.replace(R.id.content_frame, addNoteFragment, "AddNoteFragment");
-                fragmentTransaction.addToBackStack("ADDNOTE");
                 fragmentTransaction.commit();
                 return true;
             default:

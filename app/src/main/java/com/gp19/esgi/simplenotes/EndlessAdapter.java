@@ -92,13 +92,13 @@ public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
         notifyDataSetChanged();
     }
 
-    public void archiveSelectedItems(){
+    public void archiveSelectedItems(boolean archivedParam){
         DBHelper helper = new DBHelper(getContext());
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         NoteDataSource noteDataSource = new NoteDataSource(sqLiteDatabase);
         for (Integer i : getCurrentCheckedPosition())
         {
-            getItem(i).setArchived(true);
+            getItem(i).setArchived(archivedParam);
             noteDataSource.update(getItem(i));
         }
         helper.close();
@@ -138,6 +138,21 @@ public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
             noteFilter = new NoteFilter();
         }
         return noteFilter;
+    }
+
+    public void duplicateSelectedItems() {
+
+        DBHelper helper = new DBHelper(getContext());
+        SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+        NoteDataSource noteDataSource = new NoteDataSource(sqLiteDatabase);
+        for (Integer i : getCurrentCheckedPosition())
+        {
+            Note tmp = getItem(i);
+            noteDataSource.insert(new Note(tmp.getNoteTitle(), tmp.getNoteContent(), tmp.getImportanceLevel(), tmp.isArchived()));
+        }
+        helper.close();
+        sqLiteDatabase.close();
+        notifyDataSetChanged();
     }
 
     private class NoteFilter extends Filter{

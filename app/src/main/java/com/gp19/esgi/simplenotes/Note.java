@@ -39,6 +39,22 @@ public class Note implements Parcelable {
         this.importanceLevel = in.readInt();
     }
 
+    /***
+     * For a duplicate
+     * @param noteTitle
+     * @param noteContent
+     * @param importanceLevel
+     * @param isArchived
+     */
+    public Note(String noteTitle, String noteContent, int importanceLevel, boolean isArchived){
+        this.noteTitle = noteTitle;
+        this.noteContent = noteContent;
+        this.importanceLevel = importanceLevel;
+        this.isArchived = isArchived;
+        this.creationDate = new Date(System.currentTimeMillis());
+        this.lastModicationDate = null;
+    }
+
     public Note(String noteTitle, String noteContent, int importanceLevel)
     { // For a new one
         this.noteTitle = noteTitle;

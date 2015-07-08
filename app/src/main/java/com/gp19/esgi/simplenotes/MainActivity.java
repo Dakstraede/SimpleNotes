@@ -48,7 +48,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
         helper = new DBHelper(this);
         sqLiteDatabase = helper.getWritableDatabase();
         noteDataSource = new NoteDataSource(sqLiteDatabase);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
         // ActionBarDrawerToggle ties together the the proper interactions

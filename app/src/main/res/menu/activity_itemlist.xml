@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_action_new"
         android:orderInCategory="20"
         android:showAsAction="ifRoom"
-        android:title="ADD">
+        android:title="@string/action_addNote">
     </item>
 
 </menu>
