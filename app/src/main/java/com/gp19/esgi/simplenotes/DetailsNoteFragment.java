@@ -136,6 +136,11 @@ public class DetailsNoteFragment extends Fragment {
         returnMain();
     }
 
+    private void attachGroup(){
+        GroupFragment groupFragment = GroupFragment.newInstance(mNote);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, groupFragment, "GroupFragment").commit();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -171,6 +176,9 @@ public class DetailsNoteFragment extends Fragment {
                 return true;
             case R.id.note_duplicate:
                 duplicateNote();
+                return true;
+            case R.id.note_add_group:
+                attachGroup();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

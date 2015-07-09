@@ -31,6 +31,13 @@
         android:orderInCategory="10"
         android:title="@string/duplicate_note">
     </item>
+    <item
+        android:id="@+id/note_add_group"
+        android:icon="@android:drawable/ic_input_get"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="@string/attribute_group">
+    </item>
 
 
 </menu>

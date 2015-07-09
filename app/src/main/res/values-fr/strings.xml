@@ -17,6 +17,10 @@
         <item>Date de modification</item>
         <item>Importance</item>
     </string-array>
+    <string-array name="drawer_item_list">
+        <item>Notes</item>
+        <item>Notes archivées</item>
+    </string-array>
     <string name="sort_prompt">Trier par</string>
     <string name="archived_check">Montrer les notes archvées</string>
     <string name="create_label">Crée le</string>
@@ -30,4 +34,7 @@
     <string name="num_selected_items">selectionnée(s)</string>
     <string name="duplicate_note">Dupliquer la note</string>
     <string name="empty_note_list">Aucune note</string>
+    <string name="groupes_text_drawer">Groupes</string>
+    <string name="attribute_group">Attacher à un groupe</string>
+    <string name="new_group">Nouveau groupe</string>
 </resources>

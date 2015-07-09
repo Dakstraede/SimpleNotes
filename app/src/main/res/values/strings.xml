@@ -33,4 +33,7 @@
     <string name="num_selected_items">selected</string>
     <string name="duplicate_note">Duplicate note</string>
     <string name="empty_note_list">Empty list</string>
+    <string name="groupes_text_drawer">Groups</string>
+    <string name="attribute_group">Attach to group</string>
+    <string name="new_group">New group</string>
 </resources>

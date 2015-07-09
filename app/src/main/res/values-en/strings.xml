@@ -17,6 +17,10 @@
         <item>Last modification date</item>
         <item>Importance</item>
     </string-array>
+    <string-array name="drawer_item_list">
+        <item>Notes</item>
+        <item>Archived notes</item>
+    </string-array>
     <string name="sort_prompt">Sort by</string>
     <string name="archived_check">Show archived notes</string>
     <string name="create_label">Created on</string>
@@ -30,4 +34,7 @@
     <string name="num_selected_items">selected</string>
     <string name="duplicate_note">Duplicate note</string>
     <string name="empty_note_list">Empty list</string>
+    <string name="groupes_text_drawer">Groups</string>
+    <string name="attribute_group">Attach to group</string>
+    <string name="new_group">New group</string>
 </resources>

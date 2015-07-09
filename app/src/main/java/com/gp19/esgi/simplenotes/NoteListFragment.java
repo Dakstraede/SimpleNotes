@@ -48,6 +48,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     private static final int LOADER_ID = 1;
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
+    private NoteGroup noteGroup;
 //    private static View view;
     private boolean archived;
 
@@ -56,6 +57,14 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
      * fragment (e.g. upon screen orientation changes).
      */
     public NoteListFragment() {
+    }
+
+    public static NoteListFragment newInstance(NoteGroup noteGroupSelected){
+        NoteListFragment noteListFragment = new NoteListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("NOTEGROUP", noteGroupSelected);
+        noteListFragment.setArguments(bundle);
+        return noteListFragment;
     }
 
 
@@ -78,7 +87,10 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        archived = getArguments().getBoolean(SHOW_ARCHIVED);
+        if (getArguments().containsKey(SHOW_ARCHIVED))
+            archived = getArguments().getBoolean(SHOW_ARCHIVED);
+        else if (getArguments().containsKey("NOTEGROUP"))
+            noteGroup = getArguments().getParcelable("NOTEGROUP");
         this.getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -89,7 +101,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         if (savedInstanceState != null){
             listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
         }
-        adapter = new EndlessAdapter(getActivity().getBaseContext(), new ArrayList<Note>(), R.layout.row_layout);
+        adapter = new EndlessAdapter(getActivity(), new ArrayList<Note>(), R.layout.row_layout);
         this.setListAdapter(adapter);
         Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
         spinner.setOnItemSelectedListener(this);
@@ -225,8 +237,16 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public Loader<List<Note>> onCreateLoader(int i, Bundle bundle) {
-        return new SQLiteNoteDataLoader(getActivity().getApplicationContext(),
-                ((MainActivity) getActivity()).noteDataSource, NoteDataSource.COLUMN_NOTE_ARCHIVE + "=?", new String[] { String.valueOf((archived) ? 1 : 0)}, null, null, null);
+
+        if (noteGroup != null){
+            return new SQLiteNoteDataLoader(getActivity().getApplicationContext(),((MainActivity) getActivity()).noteDataSource, new String[]{String.valueOf(noteGroup.getId())}, true );
+        }
+        else{
+            return new SQLiteNoteDataLoader(getActivity().getApplicationContext(),
+                    ((MainActivity) getActivity()).noteDataSource, NoteDataSource.COLUMN_NOTE_ARCHIVE + "=?", new String[] { String.valueOf((archived) ? 1 : 0)}, null, null, null);
+
+        }
+
     }
 
     @Override
@@ -312,6 +332,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         super.onPrepareOptionsMenu(menu);
         if (menu.findItem(R.id.action_search) == null) {
             getActivity().getMenuInflater().inflate(R.menu.activity_itemlist, menu);
+
             MenuItem searchItem = menu.findItem(R.id.action_search);
             final SearchView searchView = (SearchView) searchItem.getActionView();
             final SearchView.OnQueryTextListener listener = new SearchView.OnQueryTextListener() {
@@ -320,6 +341,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                     ((EndlessAdapter) getListAdapter()).getFilter().filter(query);
                     return true;
                 }
+
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     ((EndlessAdapter) getListAdapter()).getFilter().filter(newText);

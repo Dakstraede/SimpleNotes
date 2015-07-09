@@ -18,4 +18,5 @@
     <string name="last_not_modified">Ainda não alterada</string>
     <string name="num_selected_items">selectado(s)</string>
     <string name="duplicate_note"></string>
+    <string name="groupes_text_drawer"></string>
 </resources>

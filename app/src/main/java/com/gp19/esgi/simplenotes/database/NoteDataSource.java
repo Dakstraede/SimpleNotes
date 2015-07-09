@@ -31,7 +31,6 @@ public class NoteDataSource {
     public static final String COLUMN_NOTE_ARCHIVE = "isArchived";
     public static final String COLUMN_NOTE_IMPORTANCE = "importanceLevel";
     public static final String COLUMN_CATEGORY_NAME = "categoryName";
-    public static final String COLUMN_CATEGORY_DESCRIPTION = "categoryDescription";
     public static final String TABLE_LINK = "Linked";
     public static final String COLUMN_LINK_GROUP_ID = "groupId";
     public static final String COLUMN_LINK_NOTE_ID = "noteId";
@@ -55,7 +54,7 @@ public class NoteDataSource {
             " DEFAULT(0) " +
             "COLLATE BINARY);";
 
-    public static final String CREATE_TABLE_CATEGORY = String.format("CREATE TABLE %s ( %s  INTEGER NOT NULL   PRIMARY KEY AUTOINCREMENT,  %s TEXT UNIQUE  COLLATE BINARY, %s TEXT COLLATE BINARY);", TABLE_GROUP, COLUMN_ID, COLUMN_CATEGORY_NAME, COLUMN_CATEGORY_DESCRIPTION);
+    public static final String CREATE_TABLE_CATEGORY = String.format("CREATE TABLE %s ( %s  INTEGER NOT NULL   PRIMARY KEY AUTOINCREMENT,  %s TEXT UNIQUE  COLLATE BINARY);", TABLE_GROUP, COLUMN_ID, COLUMN_CATEGORY_NAME);
 
     public static final String CREATE_LINK_TABLE = String.format("CREATE TABLE %s ( %s INTEGER NOT NULL   COLLATE BINARY,  %s INTEGER NOT NULL   COLLATE BINARY,  CONSTRAINT PK_GROUP PRIMARY KEY( %s ASC,  %s ASC))", TABLE_LINK, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID);
 
@@ -79,6 +78,7 @@ public class NoteDataSource {
             return false;
         }
         else {
+
             long result = mDatabase.insert(TABLE_LINK, null, generateContentValuesFromObject(group, note));
             return result != 1;
         }
@@ -102,6 +102,14 @@ public class NoteDataSource {
         int result = mDatabase.delete(TABLE_NOTE, COLUMN_ID + " = " + entity.getId(), null);
         mDatabase.delete(TABLE_LINK, COLUMN_LINK_NOTE_ID + " = " + entity.getId(), null);
         return result != 0;
+    }
+
+    public boolean delete(NoteGroup noteGroup, Note note){
+        if (noteGroup == null || note == null) return false;
+        else {
+            int result = mDatabase.delete(TABLE_LINK, COLUMN_LINK_GROUP_ID + " = ? AND " + COLUMN_LINK_NOTE_ID + " = ?", new String[]{String.valueOf(noteGroup.getId()), String.valueOf(note.getId())});
+            return result != 0;
+        }
     }
 
     public boolean delete(NoteGroup entity){
@@ -138,7 +146,19 @@ public class NoteDataSource {
 //        long result = mDatabase.insert()
 //    }
 
-
+    public List<Long> read(Note note)
+    {
+        Cursor cursor = mDatabase.query(TABLE_LINK, new String[]{COLUMN_LINK_GROUP_ID}, COLUMN_LINK_NOTE_ID + "=?", new String[]{String.valueOf(note.getId())}, null, null, null);
+        List<Long> groupsId = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast()){
+                groupsId.add(cursor.getLong(cursor.getColumnIndex(COLUMN_LINK_GROUP_ID)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return groupsId;
+    }
 
 
 
@@ -156,7 +176,38 @@ public class NoteDataSource {
         return notes;
     }
 
+    public List<NoteGroup> readGroups(String selction, String[] selectionArgs, String groupBy, String having, String orderBy){
+        Cursor cursor = mDatabase.query(TABLE_GROUP, getAllColumnsGroup(), selction, selectionArgs, groupBy, having, orderBy);
+        List<NoteGroup> noteGroups = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast()){
+                noteGroups.add(generateGroupFromCursor(cursor));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return noteGroups;
+    }
+
+
+
+    public List<Note> read(String[] selectionArgs)
+    {
+        Cursor cursor = mDatabase.rawQuery("SELECT N.id, noteTitle, noteContent, creationDate, lastModificationDate, isArchived, importanceLevel FROM Note AS N " +
+        " INNER JOIN Linked AS L ON N.id=L.noteId WHERE L.groupId=?",selectionArgs);
+        List<Note> notes = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast()){
+                notes.add(generateObjectFromCursor(cursor));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return notes;
+    }
+
     public List<Note> read(String selction, String[] selectionArgs, String groupBy, String having, String orderBy){
+
         Cursor cursor = mDatabase.query(TABLE_NOTE, getAllColumns(), selction, selectionArgs, groupBy, having, orderBy);
         List<Note> notes = new ArrayList<Note>();
         if (cursor != null && cursor.moveToFirst()){
@@ -174,7 +225,7 @@ public class NoteDataSource {
     }
 
     public String[] getAllColumnsGroup() {
-        return new String[] {COLUMN_ID, COLUMN_CATEGORY_NAME, COLUMN_CATEGORY_DESCRIPTION};
+        return new String[] {COLUMN_ID, COLUMN_CATEGORY_NAME};
     }
 
     public String[] getAllColumnsLink(){
@@ -186,10 +237,8 @@ public class NoteDataSource {
             return null;
         }
 
-        return new NoteGroup(cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY_NAME)));
+        return new NoteGroup(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)), cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY_NAME)));
     }
-
-
 
     public Note generateObjectFromCursor(Cursor cursor){
         if (cursor == null){
@@ -265,7 +314,6 @@ public class NoteDataSource {
         }
         values.put(COLUMN_NOTE_CREATION, sdf.format(note.getCreationDate()));
         values.put(COLUMN_NOTE_IMPORTANCE, note.getImportanceLevel());
-
         return values;
     }
 }

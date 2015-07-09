@@ -18,6 +18,9 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
     private String mGroupBy;
     private String mHaving;
     private String mOrderBy;
+    private boolean mFromGroup;
+
+
 
     public SQLiteNoteDataLoader(Context context, NoteDataSource dataSource, String selection, String[] selectionArgs, String groupBy, String having, String orderBy ){
         super(context);
@@ -30,13 +33,23 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
 
     }
 
+    public SQLiteNoteDataLoader(Context context, NoteDataSource dataSource, String[] selectionArgs, boolean fromGroup){
+        super(context);
+        mDataSource = dataSource;
+        mSelectionArgs = selectionArgs;
+        mFromGroup = fromGroup;
+    }
+
 //    @Override
 //    protected List<?> buildListGroup() {
 //        List list = mDataSource.read()
 //    }
 
-    public List buildList(){
-        return mDataSource.read(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);
+    public List<Note> buildList(){
+        if (mFromGroup){
+            return mDataSource.read(mSelectionArgs);
+        }
+        else return mDataSource.read(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);
     }
 
     public void insert(Note entity){
@@ -58,7 +71,7 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
 
         @Override
         protected Void doInBackground(Note... params) {
-//            mDataSource.update(params[0]);
+            mDataSource.update(params[0]);
             return (null);
         }
     }
@@ -73,8 +86,6 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
             mDataSource.insert(params[0]);
             return (null);
         }
-
-
     }
 
     private class DeleteTask extends ContentChangingTask<Note, Void, Void>{
@@ -87,8 +98,4 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
             return (null);
         }
     }
-
-
-
-
 }
