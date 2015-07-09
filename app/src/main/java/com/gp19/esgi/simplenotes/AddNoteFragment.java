@@ -32,7 +32,6 @@ public class AddNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         setHasOptionsMenu(true);
 //        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         final View view =  inflater.inflate(R.layout.fragment_add_note, container, false);

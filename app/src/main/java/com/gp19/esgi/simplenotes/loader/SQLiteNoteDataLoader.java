@@ -7,9 +7,6 @@ import com.gp19.esgi.simplenotes.database.NoteDataSource;
 
 import java.util.List;
 
-/**
- * Created by Mathieu on 22/02/2015.
- */
 public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
 
     private NoteDataSource mDataSource;
@@ -39,11 +36,6 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
         mSelectionArgs = selectionArgs;
         mFromGroup = fromGroup;
     }
-
-//    @Override
-//    protected List<?> buildListGroup() {
-//        List list = mDataSource.read()
-//    }
 
     public List<Note> buildList(){
         if (mFromGroup){

@@ -1,16 +1,10 @@
 package com.gp19.esgi.simplenotes.loader;
 
 import android.content.Context;
-
-import com.gp19.esgi.simplenotes.Note;
 import com.gp19.esgi.simplenotes.NoteGroup;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
-
 import java.util.List;
 
-/**
- * Created by Mathieu on 22/02/2015.
- */
 public class SQLiteNoteGroupLoader extends AbstractDataLoader<List<NoteGroup>> {
 
     private NoteDataSource mDataSource;
@@ -30,11 +24,6 @@ public class SQLiteNoteGroupLoader extends AbstractDataLoader<List<NoteGroup>> {
         mOrderBy = orderBy;
 
     }
-
-//    @Override
-//    protected List<?> buildListGroup() {
-//        List list = mDataSource.read()
-//    }
 
     public List<NoteGroup> buildList(){
         return mDataSource.readGroups(mSelection, mSelectionArgs, mGroupBy, mHaving, mOrderBy);
@@ -74,8 +63,6 @@ public class SQLiteNoteGroupLoader extends AbstractDataLoader<List<NoteGroup>> {
             mDataSource.insert(params[0]);
             return (null);
         }
-
-
     }
 
     private class DeleteTask extends ContentChangingTask<NoteGroup, Void, Void>{
@@ -88,8 +75,4 @@ public class SQLiteNoteGroupLoader extends AbstractDataLoader<List<NoteGroup>> {
             return (null);
         }
     }
-
-
-
-
 }

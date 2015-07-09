@@ -2,22 +2,17 @@ package com.gp19.esgi.simplenotes;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.SearchView;
 import android.widget.TextView;
-
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
@@ -188,6 +183,4 @@ public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
             notifyDataSetChanged();
         }
     }
-
-
 }

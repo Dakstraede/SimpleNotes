@@ -1,17 +1,12 @@
 package com.gp19.esgi.simplenotes;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.ListFragment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.ActionMode;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,13 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
-
-
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
 import com.gp19.esgi.simplenotes.loader.SQLiteNoteDataLoader;
 
@@ -49,7 +40,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     private List<Note> listNotes;
     private OnFragmentInteractionListener mListener;
     private NoteGroup noteGroup;
-//    private static View view;
     private boolean archived;
 
     /**
@@ -318,14 +308,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        menu.clear();
-
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {

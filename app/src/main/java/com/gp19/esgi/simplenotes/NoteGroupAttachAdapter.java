@@ -9,9 +9,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import java.util.List;
 
-/**
- * Created by Mathieu on 09/07/2015.
- */
 public class NoteGroupAttachAdapter extends ArrayAdapter<NoteGroup> {
 
 

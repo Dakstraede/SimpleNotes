@@ -3,19 +3,14 @@ package com.gp19.esgi.simplenotes.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.gp19.esgi.simplenotes.Note;
 import com.gp19.esgi.simplenotes.NoteGroup;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Mathieu on 22/02/2015.
- */
 public class NoteDataSource {
 
     protected SQLiteDatabase mDatabase;
@@ -136,15 +131,6 @@ public class NoteDataSource {
         int result = mDatabase.update(TABLE_GROUP, generateContentValuesFromObject(entity), COLUMN_ID + " = " + entity.getId(), null);
         return result != 0;
     }
-
-
-
-//    public boolean insert(Group en1, Note en2){
-//        if (en1 == null || en2 == null){
-//            return false;
-//        }
-//        long result = mDatabase.insert()
-//    }
 
     public List<Long> read(Note note)
     {

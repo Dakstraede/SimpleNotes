@@ -5,9 +5,6 @@ import android.content.Context;
 
 import java.util.List;
 
-/**
- * Created by Mathieu on 22/02/2015.
- */
 public abstract class AbstractDataLoader<E extends List<?>> extends AsyncTaskLoader<E> {
 
     protected E mlastDataList = null;

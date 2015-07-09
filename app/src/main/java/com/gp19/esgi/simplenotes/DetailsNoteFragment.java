@@ -29,11 +29,9 @@ public class DetailsNoteFragment extends Fragment {
     private SimpleDateFormat smp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
     private static final Integer[] items = new Integer[]{1,2,3};
     private ArrayAdapter<Integer> adapter;
-
     private EditText title;
     private EditText content;
     private Spinner importance;
-    private Spinner group;
 
     public static DetailsNoteFragment newInstance(Note note){
         DetailsNoteFragment fragment = new DetailsNoteFragment();
@@ -47,16 +45,6 @@ public class DetailsNoteFragment extends Fragment {
 
     public DetailsNoteFragment() {
         // Required empty public constructor
-    }
-
-
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
     }
 
     @Override

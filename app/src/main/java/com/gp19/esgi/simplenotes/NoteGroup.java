@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-/**
- * Created by Mathieu on 22/02/2015.
- */
 public class NoteGroup implements Parcelable{
 
     private long id;

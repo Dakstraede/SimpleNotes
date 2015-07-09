@@ -9,9 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Mathieu on 08/07/2015.
- */
 public class DrawerGroupAdapter extends ArrayAdapter<NoteGroup>{
 
     /**

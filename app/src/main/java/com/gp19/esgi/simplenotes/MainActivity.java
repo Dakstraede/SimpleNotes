@@ -1,6 +1,4 @@
 package com.gp19.esgi.simplenotes;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -11,13 +9,9 @@ import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +30,6 @@ import java.util.List;
 
 public class MainActivity extends Activity implements NoteListFragment.OnFragmentInteractionListener, GroupFragment.OnFragmentInteractionListener, LoaderManager.LoaderCallbacks<List<NoteGroup>>{
     private static final int LOADER_ID = 2;
-
     private SQLiteDatabase sqLiteDatabase;
     public NoteDataSource noteDataSource;
     private DBHelper helper;
@@ -47,7 +40,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     private ListView mDrawerList;
     private DrawerGroupAdapter groupArrayAdapter;
     public boolean lastSelected;
-    private List<String> groups;
     private ListView groupList;
 
 
@@ -122,8 +114,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     @Override
     protected void onStop() {
         super.onStop();
-        helper.close();
-        sqLiteDatabase.close();
     }
 
     @Override
@@ -284,7 +274,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     public void onLoadFinished(Loader<List<NoteGroup>> loader, List<NoteGroup> data) {
         groupArrayAdapter.clear();
         groupArrayAdapter.addAll(data);
-//        groupArrayAdapter.notifyDataSetChanged();
     }
 
     /**
