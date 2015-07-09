@@ -1,4 +1,5 @@
 package com.gp19.esgi.simplenotes;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -102,6 +103,10 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     @Override
     protected void onResume() {
         super.onResume();
+        helper = new DBHelper(this);
+        sqLiteDatabase = helper.getWritableDatabase();
+        noteDataSource = new NoteDataSource(sqLiteDatabase);
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override

@@ -37,6 +37,8 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     private static final String NOTE = "NOTE";
     private Note currentNote;
     private NoteGroupAttachAdapter adapter;
+    private View header;
+    private EditText editText;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,60 +48,53 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        if (menu.findItem(R.id.action_new_group) == null){
-            inflater.inflate(R.menu.menu_attach_group, menu);
-            MenuItem newGroupItem = menu.findItem(R.id.action_new_group);
-            final EditText editTextnewGroup = (EditText) newGroupItem.getActionView();
-            editTextnewGroup.setHint("New group");
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_attach_group, menu);
+        MenuItem newGroupItem = menu.findItem(R.id.action_new_group);
+        editText= (EditText) newGroupItem.getActionView();
+        editText.setHint("New group");
+        editText.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            editTextnewGroup.addTextChangedListener(new TextWatcher() {
+            }
 
-                private View headView;
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                    if (s.length() > 0){
 
-                }
-
-                @Override
-                public void onTextChanged(final CharSequence s, int start, int before, int count) {
-                    if (s.length()>0){
                         if (getListView().getHeaderViewsCount() == 0){
-                            headView = getListView().inflate(getActivity().getBaseContext(), R.layout.create_new_layout, null);
-                            getListView().addHeaderView(headView);
-                            headView.setClickable(true);
-                            headView.setOnClickListener(new View.OnClickListener() {
+                            getListView().addHeaderView(header);
+                            header.setClickable(true);
+                            header.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     ((MainActivity) getActivity()).noteDataSource.insert(new NoteGroup(String.valueOf(s)));
-                                    getListView().removeHeaderView(headView);
-                                    editTextnewGroup.setText(null);
-                                    editTextnewGroup.clearFocus();
+                                    getListView().removeHeaderView(header);
+                                    editText.setText(null);
+                                    editText.clearFocus();
                                     getLoaderManager().restartLoader(LOADER_ID, null, ((GroupFragment) getFragmentManager().findFragmentByTag("GroupFragment")));
                                     getLoaderManager().restartLoader(2, null, ((MainActivity) getActivity()));
                                 }
                             });
 
                         }
-                        TextView t = ((TextView) headView.findViewById(R.id.textView2));
+                        TextView t = ((TextView) header.findViewById(R.id.textView2));
                         t.setText(getResources().getString(R.string.create_label) + " : '" + s + "'");
-
                     }
                     else {
                         if (getListView().getHeaderViewsCount() > 0){
-                            getListView().removeHeaderView(headView);
+                            getListView().removeHeaderView(header);
                         }
                     }
                 }
+            @Override
+            public void afterTextChanged(Editable s) {
 
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        }
+            }
+        });
     }
 
     public static GroupFragment newInstance(Note selectedNote){
@@ -125,6 +120,7 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
         adapter = new NoteGroupAttachAdapter(getActivity(), R.layout.group_row_layout, new ArrayList<NoteGroup>(), ((MainActivity) getActivity()).noteDataSource.read(currentNote));
         this.setListAdapter(adapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
+        header = getListView().inflate(getActivity().getBaseContext(), R.layout.create_new_layout, null);
 
     }
 
