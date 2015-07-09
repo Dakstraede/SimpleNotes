@@ -7,13 +7,4 @@
         android:visible="true"
         android:actionViewClass="android.widget.EditText"
         />
-
-    <item android:id="@+id/action_rename_group"
-        android:title="Rename"
-        android:showAsAction="never"
-        />
-    <item android:id="@+id/action_remove_group"
-        android:title="Remove group"
-        android:showAsAction="never"
-        />
 </menu>
