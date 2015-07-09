@@ -51,7 +51,8 @@ public class NoteDataSource {
 
     public static final String CREATE_TABLE_CATEGORY = String.format("CREATE TABLE %s ( %s  INTEGER NOT NULL   PRIMARY KEY AUTOINCREMENT,  %s TEXT UNIQUE  COLLATE BINARY);", TABLE_GROUP, COLUMN_ID, COLUMN_CATEGORY_NAME);
 
-    public static final String CREATE_LINK_TABLE = String.format("CREATE TABLE %s ( %s INTEGER NOT NULL   COLLATE BINARY,  %s INTEGER NOT NULL   COLLATE BINARY,  CONSTRAINT PK_GROUP PRIMARY KEY( %s ASC,  %s ASC))", TABLE_LINK, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID);
+    public static final String CREATE_LINK_TABLE = String.format("CREATE TABLE %s ( %s INTEGER NOT NULL   COLLATE BINARY,  %s INTEGER NOT NULL   COLLATE BINARY,  CONSTRAINT PK_GROUP PRIMARY KEY( %s ASC,  %s ASC), FOREIGN KEY(%s) REFERENCES %s(id) ON DELETE CASCADE, FOREIGN KEY(%s) REFERENCES %s(id) ON DELETE CASCADE);",
+            TABLE_LINK, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID, COLUMN_LINK_GROUP_ID, COLUMN_LINK_NOTE_ID, COLUMN_LINK_GROUP_ID, TABLE_GROUP, COLUMN_LINK_NOTE_ID, TABLE_NOTE);
 
     public NoteDataSource(SQLiteDatabase database){
         this.mDatabase = database;
@@ -151,7 +152,7 @@ public class NoteDataSource {
 
     public List<Note> read(){
         Cursor cursor = mDatabase.query(TABLE_NOTE, getAllColumns(), null, null, null, null, null);
-        List<Note> notes = new ArrayList<Note>();
+        List<Note> notes = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()){
             while (!cursor.isAfterLast()){
                 notes.add(generateObjectFromCursor(cursor));
@@ -195,7 +196,7 @@ public class NoteDataSource {
     public List<Note> read(String selction, String[] selectionArgs, String groupBy, String having, String orderBy){
 
         Cursor cursor = mDatabase.query(TABLE_NOTE, getAllColumns(), selction, selectionArgs, groupBy, having, orderBy);
-        List<Note> notes = new ArrayList<Note>();
+        List<Note> notes = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()){
             while (!cursor.isAfterLast()){
                 notes.add(generateObjectFromCursor(cursor));
