@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Set;
 
 class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
-    public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+    private static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
     private final int layoutId;
     private HashMap<Integer, Boolean> mSelection = new HashMap<>();
     private ArrayList<Note> originalList;

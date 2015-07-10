@@ -9,11 +9,7 @@ public class NoteGroup implements Parcelable{
 
     private long id;
     private String groupName;
-
-
-    private ArrayList<Note> notes;
-
-    public NoteGroup(Parcel in){
+    private NoteGroup(Parcel in){
         this.groupName = in.readString();
         this.id = in.readInt();
     }
@@ -38,19 +34,9 @@ public class NoteGroup implements Parcelable{
     public String getGroupName() {
         return groupName;
     }
-
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
-
-    public ArrayList<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(ArrayList<Note> notes) {
-        this.notes = notes;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.groupName);

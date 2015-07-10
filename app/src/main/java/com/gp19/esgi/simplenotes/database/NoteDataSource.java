@@ -13,8 +13,8 @@ import java.util.Locale;
 
 public class NoteDataSource {
 
-    protected SQLiteDatabase mDatabase;
-    public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+    private SQLiteDatabase mDatabase;
+    private static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
     public static final String TABLE_NOTE = "Note";
     public static final String TABLE_GROUP = "Category";
@@ -258,9 +258,6 @@ public class NoteDataSource {
                 note.setLastModicationDate(null);
             }
         }
-
-
-
         note.setImportanceLevel(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTE_IMPORTANCE)));
 
         return note;

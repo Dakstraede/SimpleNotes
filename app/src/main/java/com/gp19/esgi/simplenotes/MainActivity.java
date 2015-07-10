@@ -127,7 +127,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().findFragmentByTag("GroupFragment").isVisible())
+        if (getFragmentManager().findFragmentByTag("GroupFragment") != null && getFragmentManager().findFragmentByTag("GroupFragment").isVisible())
         {
             getFragmentManager().popBackStack("GROUP", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }

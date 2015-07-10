@@ -1,18 +1,10 @@
 package com.gp19.esgi.simplenotes;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Note implements Parcelable {
-
-    public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
-
-
     private String noteTitle;
     private String noteContent;
     private long id;
@@ -23,7 +15,7 @@ public class Note implements Parcelable {
 
     public Note(){}
 
-    public Note(Parcel in){
+    private Note(Parcel in){
         this.noteTitle = in.readString();
         this.noteContent = in.readString();
         this.id = in.readLong();

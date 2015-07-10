@@ -24,7 +24,7 @@ public class SQLiteNoteDataLoader extends AbstractDataLoader<List<Note>> {
         mDataSource = dataSource;
         mSelection = selection;
         mSelectionArgs = selectionArgs;
-        mGroupBy = null;
+        mGroupBy = groupBy;
         mHaving = having;
         mOrderBy = orderBy;
 

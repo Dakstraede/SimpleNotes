@@ -28,7 +28,8 @@
             android:layout_weight="1"
             android:hint="@string/note_title_hint"
             android:gravity="center"
-            android:maxLength="22"/>
+            android:maxLength="22"
+            android:imeOptions="flagNoExtractUi" />
 
     </LinearLayout>
 
@@ -37,17 +38,18 @@
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
         android:hint="@string/note_content_hint"
         android:enabled="true"
-        android:gravity="top"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:gravity="start|top"
+        android:layout_weight="1"
+        android:imeOptions="flagNoExtractUi"
+ />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:weightSum="1">
 
         <TextView
@@ -57,7 +59,8 @@
             android:id="@+id/importanceText"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            />
 
         <Spinner
             android:layout_width="wrap_content"
