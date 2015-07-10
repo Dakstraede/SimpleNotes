@@ -7,13 +7,6 @@
         android:actionViewClass="android.widget.SearchView"
         />
     <item
-        android:id="@+id/edit_item"
-        android:icon="@drawable/ic_action_edit"
-        android:showAsAction="ifRoom"
-        android:orderInCategory="10"
-        android:title="EDIT">
-    </item>
-    <item
         android:id="@+id/remove_group"
         android:icon="@drawable/ic_action_discard"
         android:showAsAction="ifRoom"
