@@ -91,7 +91,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
         if (savedInstanceState != null){
             listNotes = savedInstanceState.getParcelableArrayList(KEY_NOTES);
         }
-        adapter = new EndlessAdapter(getActivity(), new ArrayList<Note>(), R.layout.row_layout);
+        adapter = new EndlessAdapter(getActivity(), new ArrayList<Note>());
         this.setListAdapter(adapter);
         Spinner spinner = (Spinner) getActivity().findViewById(R.id.sort_spinner);
         spinner.setOnItemSelectedListener(this);
@@ -110,11 +110,15 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 }
                 mode.setTitle(r + " " + getResources().getString(R.string.num_selected_items));
             }
+
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 r = 0;
                 MenuInflater inflater = getActivity().getMenuInflater();
-                if (((MainActivity) getActivity()).lastSelected) inflater.inflate(R.menu.contextual_menu_main_archived, menu);
+                if (noteGroup != null) {
+                    inflater.inflate(R.menu.contextual_menu_from_group_main, menu);
+                } else if (((MainActivity) getActivity()).lastSelected)
+                    inflater.inflate(R.menu.contextual_menu_main_archived, menu);
                 else inflater.inflate(R.menu.contextual_menu_main, menu);
                 return true;
             }
@@ -172,11 +176,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     private void restartLoader()
     {
         getLoaderManager().destroyLoader(LOADER_ID);
@@ -222,7 +221,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Note selectedNote);
+        void onFragmentInteraction(Note selectedNote);
     }
 
     @Override
@@ -285,7 +284,7 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                             return 0;
                         } else if (lhs.getLastModificationDate() != null && rhs.getLastModificationDate() == null) {
                             return -1;
-                        } else if (lhs.getLastModificationDate() == null && rhs.getLastModificationDate() != null) {
+                        } else if (lhs.getLastModificationDate() == null) {
                             return 1;
                         } else {
                             return lhs.getLastModificationDate().compareTo(rhs.getLastModificationDate());
@@ -313,7 +312,8 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (menu.findItem(R.id.action_search) == null) {
-            getActivity().getMenuInflater().inflate(R.menu.activity_itemlist, menu);
+            if (noteGroup != null) getActivity().getMenuInflater().inflate(R.menu.main_action_bar_from_group, menu);
+            else getActivity().getMenuInflater().inflate(R.menu.activity_itemlist, menu);
 
             MenuItem searchItem = menu.findItem(R.id.action_search);
             final SearchView searchView = (SearchView) searchItem.getActionView();
@@ -350,6 +350,13 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 AddNoteFragment addNoteFragment = new AddNoteFragment();
                 fragmentTransaction.replace(R.id.content_frame, addNoteFragment, "AddNoteFragment");
                 fragmentTransaction.commit();
+                return true;
+            case R.id.edit_item:
+                return true;
+            case R.id.remove_group:
+                ((MainActivity) getActivity()).noteDataSource.delete(noteGroup);
+                getLoaderManager().restartLoader(2, null, ((MainActivity) getActivity()));
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, newInstance(false), "NoteListFragment").commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

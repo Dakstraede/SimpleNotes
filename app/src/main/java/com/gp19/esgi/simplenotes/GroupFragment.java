@@ -34,7 +34,7 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     private final int LOADER_ID = 3;
     private OnFragmentInteractionListener mListener;
     private static final String NOTE = "NOTE";
-    public Note currentNote;
+    private Note currentNote;
     private NoteGroupAttachAdapter adapter;
     private View header;
     private EditText editText;
@@ -127,7 +127,8 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
         adapter = new NoteGroupAttachAdapter(getActivity(), R.layout.group_row_layout, new ArrayList<NoteGroup>(), ((MainActivity) getActivity()).noteDataSource.read(currentNote));
         this.setListAdapter(adapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        header = getListView().inflate(getActivity().getBaseContext(), R.layout.create_new_layout, null);
+        getListView();
+        header = View.inflate(getActivity().getBaseContext(), R.layout.create_new_layout, null);
 
     }
 
@@ -182,7 +183,7 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Note currentNote, NoteGroup noteGroup, boolean checked);
+        void onFragmentInteraction(Note currentNote, NoteGroup noteGroup, boolean checked);
     }
 
     /**

@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import java.util.List;
 
-public class NoteGroupAttachAdapter extends ArrayAdapter<NoteGroup> {
+class NoteGroupAttachAdapter extends ArrayAdapter<NoteGroup> {
 
 
     private List<Long> mapped;

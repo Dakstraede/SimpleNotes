@@ -39,7 +39,6 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:hint="@string/note_content_hint"
-        android:editable="true"
         android:enabled="true"
         android:gravity="top"
         android:inputType="textMultiLine" />

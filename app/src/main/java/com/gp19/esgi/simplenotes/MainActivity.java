@@ -112,11 +112,6 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onFragmentInteraction(Note selectedNote) {
         FragmentTransaction fragmentTransaction = this.getFragmentManager().beginTransaction();
         DetailsNoteFragment detailsNoteFragment = DetailsNoteFragment.newInstance(selectedNote);
@@ -132,7 +127,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().findFragmentByTag("GroupFragment") != null)
+        if (getFragmentManager().findFragmentByTag("GroupFragment").isVisible())
         {
             getFragmentManager().popBackStack("GROUP", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
@@ -152,11 +147,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item))
-        {
-            return true;
-        }
-        return false;
+        return mDrawerToggle.onOptionsItemSelected(item);
     }
 
     @Override
@@ -279,6 +270,7 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
     public void onLoadFinished(Loader<List<NoteGroup>> loader, List<NoteGroup> data) {
         groupArrayAdapter.clear();
         groupArrayAdapter.addAll(data);
+        groupArrayAdapter.notifyDataSetChanged();
     }
 
     /**

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_search"
+        android:title="@string/main_search_placeholder"
+        android:icon="@drawable/ic_action_search"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:actionViewClass="android.widget.SearchView"
+        />
+    <item
+        android:id="@+id/edit_item"
+        android:icon="@drawable/ic_action_edit"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="EDIT">
+    </item>
+    <item
+        android:id="@+id/remove_group"
+        android:icon="@drawable/ic_action_discard"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="10"
+        android:title="@string/remove_button">
+    </item>
+</menu>

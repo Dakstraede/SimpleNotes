@@ -15,19 +15,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
-    private int layoutId;
+class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
+    private final int layoutId;
     private HashMap<Integer, Boolean> mSelection = new HashMap<>();
-    ArrayList<Note> originalList;
+    private ArrayList<Note> originalList;
     private ArrayList<Note> filteredList;
     private NoteFilter noteFilter;
 
 
 
-    public EndlessAdapter(Context context, ArrayList<Note> itemList, int layoutId)
+    public EndlessAdapter(Context context, ArrayList<Note> itemList)
     {
-        super(context, layoutId, itemList);
-        this.layoutId  = layoutId;
+        super(context, R.layout.row_layout, itemList);
+        this.layoutId  = R.layout.row_layout;
         this.filteredList = itemList;
         this.originalList = itemList;
 
@@ -44,7 +44,7 @@ public class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
         return  result == null ? false : result;
     }
 
-    public Set<Integer> getCurrentCheckedPosition(){
+    private Set<Integer> getCurrentCheckedPosition(){
         return mSelection.keySet();
     }
 

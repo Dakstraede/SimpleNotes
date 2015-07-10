@@ -42,7 +42,7 @@ public class AddNoteFragment extends Fragment {
 
     }
 
-    public void saveNote(){
+    private void saveNote(){
         EditText titleZone = (EditText) getView().findViewById(R.id.note_edit);
         String titleText =  titleZone.getText().toString();
         EditText contentZone = (EditText) getView().findViewById(R.id.note_content);

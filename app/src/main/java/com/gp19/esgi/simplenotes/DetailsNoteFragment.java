@@ -26,9 +26,8 @@ public class DetailsNoteFragment extends Fragment {
 
     private static final String KEY = "NOTE";
     private Note mNote;
-    private SimpleDateFormat smp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+    private final SimpleDateFormat smp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
     private static final Integer[] items = new Integer[]{1,2,3};
-    private ArrayAdapter<Integer> adapter;
     private EditText title;
     private EditText content;
     private Spinner importance;
@@ -47,10 +46,6 @@ public class DetailsNoteFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +58,7 @@ public class DetailsNoteFragment extends Fragment {
         title = (EditText) view.findViewById(R.id.edit_title);
         content = (EditText) view.findViewById(R.id.edit_content);
         importance = (Spinner) view.findViewById(R.id.importance_edit_spinner);
-        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
         importance.setAdapter(adapter);
         TextView creationDate = (TextView) view.findViewById(R.id.creation_date_label);
         TextView lastModification = (TextView) view.findViewById(R.id.modification_date_label);
@@ -86,7 +81,7 @@ public class DetailsNoteFragment extends Fragment {
         return view;
     }
 
-    public void saveNote(){
+    private void saveNote(){
         mNote.setNoteTitle(title.getText().toString());
         mNote.setNoteContent(content.getText().toString());
         mNote.setLastModicationDate();
@@ -104,7 +99,7 @@ public class DetailsNoteFragment extends Fragment {
         getFragmentManager().beginTransaction().replace(R.id.content_frame, NoteListFragment.newInstance(((MainActivity) getActivity()).lastSelected), "NoteListFragment").commit();
     }
 
-    public void removeNote(){
+    private void removeNote(){
         DBHelper helper = new DBHelper(getActivity());
         SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
         NoteDataSource noteDataSource = new NoteDataSource(sqLiteDatabase);
@@ -136,12 +131,6 @@ public class DetailsNoteFragment extends Fragment {
             getActivity().getMenuInflater().inflate(R.menu.note_details_menu_archived, menu);
         }
         else getActivity().getMenuInflater().inflate(R.menu.note_details_menu, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override

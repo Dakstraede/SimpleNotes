@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class DrawerGroupAdapter extends ArrayAdapter<NoteGroup>{
+class DrawerGroupAdapter extends ArrayAdapter<NoteGroup>{
 
     /**
      * Constructor
