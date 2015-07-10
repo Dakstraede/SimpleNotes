@@ -11,11 +11,15 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import com.gp19.esgi.simplenotes.database.DBHelper;
 import com.gp19.esgi.simplenotes.database.NoteDataSource;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 
 class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
+    public static final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
     private final int layoutId;
     private HashMap<Integer, Boolean> mSelection = new HashMap<>();
     private ArrayList<Note> originalList;
@@ -117,8 +121,13 @@ class EndlessAdapter extends ArrayAdapter<Note> implements Filterable{
             tv2.setText(getItem(position).getNoteContent().substring(0,14) + "[...]");
         }
         else tv2.setText(getItem(position).getNoteContent());
-//        TextView tv3 = (TextView) result.findViewById(R.id.txtDate);
-//        tv3.setText(itemList.get(position).getCreationDate().toString());
+        TextView tv3 = (TextView) result.findViewById(R.id.creation_label);
+        tv3.setText(getContext().getText(R.string.create_label) + " : " + sdf.format(getItem(position).getCreationDate()));
+
+        TextView tv4 = ((TextView) result.findViewById(R.id.modification_label));
+        if (getItem(position).getLastModificationDate() == null) tv4.setText(R.string.last_not_modified);
+        else tv4.setText(getContext().getResources().getText(R.string.modif_label) + " : " + sdf.format(getItem(position).getLastModificationDate()));
+
         result.setBackgroundColor(getContext().getResources().getColor(R.color.background_material_light));
         if (mSelection.get(position) != null)
         {

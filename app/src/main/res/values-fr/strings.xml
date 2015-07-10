@@ -37,4 +37,5 @@
     <string name="groupes_text_drawer">Groupes</string>
     <string name="attribute_group">Attacher à un groupe</string>
     <string name="new_group">Nouveau groupe</string>
+    <string name="create_group">Créer</string>
 </resources>

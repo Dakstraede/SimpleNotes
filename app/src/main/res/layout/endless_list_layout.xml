@@ -33,21 +33,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="120dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:src="@drawable/editor_memo_note_pad_" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/empty_note_list"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:textSize="38sp" />
+            android:textSize="38sp"
+            android:drawableLeft="@drawable/editor_memo_note_pad_"
+            android:drawableStart="@drawable/editor_memo_note_pad_"
+            android:paddingLeft="12dp"
+            android:gravity="center" />
     </LinearLayout>
 </LinearLayout>

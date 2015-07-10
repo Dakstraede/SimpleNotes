@@ -7,20 +7,13 @@
     android:paddingRight="20dp"
     android:paddingTop="20dp"
     android:id="@+id/new_group_id_layout">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-
-        android:src="@android:drawable/ic_input_add"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/textView2"
         android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp" />
+        android:layout_marginStart="40dp"
+        android:drawableStart="@android:drawable/ic_input_add"
+        android:drawableLeft="@android:drawable/ic_input_add"/>
 </LinearLayout>

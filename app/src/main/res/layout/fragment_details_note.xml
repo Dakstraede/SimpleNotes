@@ -61,11 +61,10 @@
             android:layout_marginEnd="10dp"/>
 
         <Spinner
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/importance_edit_spinner"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.2"
             android:prompt="@string/importance_prompt"/>
     </LinearLayout>
 

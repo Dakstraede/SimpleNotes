@@ -89,7 +89,7 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
 
                         }
                         TextView t = ((TextView) header.findViewById(R.id.textView2));
-                        t.setText(getResources().getString(R.string.create_label) + " : '" + s + "'");
+                        t.setText(getResources().getString(R.string.create_group) + " : '" + s + "'");
                     }
                     else {
                         if (getListView().getHeaderViewsCount() > 0){
