@@ -7,4 +7,10 @@
         android:visible="true"
         android:actionViewClass="android.widget.EditText"
         />
+    <item
+        android:id="@+id/done_attach"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:showAsAction="ifRoom"
+        android:title="@string/save_button">
+    </item>
 </menu>

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     private final int LOADER_ID = 3;
     private OnFragmentInteractionListener mListener;
     private static final String NOTE = "NOTE";
-    private Note currentNote;
+    public Note currentNote;
     private NoteGroupAttachAdapter adapter;
     private View header;
     private EditText editText;
@@ -46,12 +47,20 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.menu_attach_group, menu);
         MenuItem newGroupItem = menu.findItem(R.id.action_new_group);
+        getActivity().getActionBar().setDisplayShowCustomEnabled(true);
         editText= (EditText) newGroupItem.getActionView();
+        editText.setPadding(70,0,22,0);
         editText.setHint("New group");
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
         editText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -204,5 +213,21 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<List<NoteGroup>> loader) {
 
+    }
+
+    private void returnDetails(){
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, DetailsNoteFragment.newInstance(currentNote), "NoteDetailsFragment").commit();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.done_attach:
+                returnDetails();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

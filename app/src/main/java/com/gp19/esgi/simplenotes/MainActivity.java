@@ -132,9 +132,14 @@ public class MainActivity extends Activity implements NoteListFragment.OnFragmen
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().findFragmentByTag("NoteDetailsFragment") != null || getFragmentManager().findFragmentByTag("AddNoteFragment") != null) {
+        if (getFragmentManager().findFragmentByTag("GroupFragment") != null)
+        {
+            getFragmentManager().popBackStack("GROUP", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        else if (getFragmentManager().findFragmentByTag("NoteDetailsFragment") != null || getFragmentManager().findFragmentByTag("AddNoteFragment") != null) {
             getFragmentManager().beginTransaction().replace(R.id.content_frame, NoteListFragment.newInstance(lastSelected), "NoteListFragment").commit();
-        } else super.onBackPressed();
+        }
+        else super.onBackPressed();
     }
 
 

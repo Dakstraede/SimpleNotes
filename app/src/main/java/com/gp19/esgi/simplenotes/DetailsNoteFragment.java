@@ -126,7 +126,7 @@ public class DetailsNoteFragment extends Fragment {
 
     private void attachGroup(){
         GroupFragment groupFragment = GroupFragment.newInstance(mNote);
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, groupFragment, "GroupFragment").commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, groupFragment, "GroupFragment").addToBackStack("GROUP").commit();
     }
 
     @Override
