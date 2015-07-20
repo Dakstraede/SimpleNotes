@@ -351,8 +351,6 @@ public class NoteListFragment extends ListFragment implements AdapterView.OnItem
                 fragmentTransaction.replace(R.id.content_frame, addNoteFragment, "AddNoteFragment");
                 fragmentTransaction.commit();
                 return true;
-            case R.id.edit_item:
-                return true;
             case R.id.remove_group:
                 ((MainActivity) getActivity()).noteDataSource.delete(noteGroup);
                 getLoaderManager().restartLoader(2, null, ((MainActivity) getActivity()));

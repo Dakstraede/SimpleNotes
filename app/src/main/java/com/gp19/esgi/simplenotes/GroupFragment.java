@@ -127,7 +127,6 @@ public class GroupFragment extends ListFragment implements LoaderManager.LoaderC
         adapter = new NoteGroupAttachAdapter(getActivity(), R.layout.group_row_layout, new ArrayList<NoteGroup>(), ((MainActivity) getActivity()).noteDataSource.read(currentNote));
         this.setListAdapter(adapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        getListView();
         header = View.inflate(getActivity().getBaseContext(), R.layout.create_new_layout, null);
 
     }
